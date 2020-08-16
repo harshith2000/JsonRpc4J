@@ -38,5 +38,4 @@ public class Session {
     public boolean logout() {
         return false;
     }
-
 }
