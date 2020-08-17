@@ -37,4 +37,5 @@ public class JsonRpc {
     public static void setHttpVersion(Version http) {
         client = BUILDER.version(http).build();
     }
+
 }

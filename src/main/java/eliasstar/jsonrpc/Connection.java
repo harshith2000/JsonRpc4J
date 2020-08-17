@@ -15,7 +15,6 @@ import com.google.gson.JsonObject;
 
 import eliasstar.jsonrpc.exceptions.RpcConnectionException;
 import eliasstar.jsonrpc.exceptions.RpcErrorException;
-import eliasstar.jsonrpc.exceptions.RpcException;
 import eliasstar.jsonrpc.exceptions.RpcIdMismatchException;
 import eliasstar.jsonrpc.objects.Request;
 import eliasstar.jsonrpc.objects.Response;
@@ -32,21 +31,19 @@ public class Connection {
         this.jsonConverter = gsonBuilder.serializeNulls().create();
     }
 
-    public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcException {
+    public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
         return sendRequest(new Request("test", method, params));
     }
 
-    public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcException {
+    public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
         return sendRequest(new Request("test", method, params));
     }
 
-    public JsonElement sendRequest(Request req) throws RpcException {
+    public JsonElement sendRequest(Request req) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
         var body = jsonConverter.toJson(req, Request.class);
-
         var httpReq = reqBuilder.POST(BodyPublishers.ofString(body)).build();
 
         HttpResponse<String> httpRes;
-
         try {
             httpRes = client.send(httpReq, BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
