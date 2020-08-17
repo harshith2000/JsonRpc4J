@@ -1,0 +1,67 @@
+package eliasstar.jsonrpc;
+
+import java.io.IOException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import eliasstar.jsonrpc.exceptions.RpcConnectionException;
+import eliasstar.jsonrpc.exceptions.RpcErrorException;
+import eliasstar.jsonrpc.exceptions.RpcException;
+import eliasstar.jsonrpc.exceptions.RpcIdMismatchException;
+import eliasstar.jsonrpc.objects.Request;
+import eliasstar.jsonrpc.objects.Response;
+
+public class Connection {
+
+    private final HttpClient client;
+    private final HttpRequest.Builder reqBuilder;
+    private final Gson jsonConverter;
+
+    public Connection(HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
+        this.client = client;
+        this.reqBuilder = reqBuilder.setHeader("Content-Type", "application/json");
+        this.jsonConverter = gsonBuilder.serializeNulls().create();
+    }
+
+    public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcException {
+        return sendRequest(new Request("test", method, params));
+    }
+
+    public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcException {
+        return sendRequest(new Request("test", method, params));
+    }
+
+    public JsonElement sendRequest(Request req) throws RpcException {
+        var body = jsonConverter.toJson(req, Request.class);
+
+        var httpReq = reqBuilder.POST(BodyPublishers.ofString(body)).build();
+
+        HttpResponse<String> httpRes;
+
+        try {
+            httpRes = client.send(httpReq, BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RpcConnectionException(e.getMessage(), e);
+        }
+
+        var res = jsonConverter.fromJson(httpRes.body(), Response.class);
+
+        if (!res.isSuccessful())
+            throw new RpcErrorException(res.error());
+
+        if (res.id() != req.id())
+            throw new RpcIdMismatchException(req.id(), res.id());
+
+        return res.result();
+    }
+
+}
