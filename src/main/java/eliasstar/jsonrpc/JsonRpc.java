@@ -14,6 +14,7 @@ public class JsonRpc {
 
     private static final HttpClient.Builder BUILDER = HttpClient.newBuilder().cookieHandler(new CookieManager()).connectTimeout(Duration.ofMinutes(1));
     private static HttpClient client;
+    private static int id = 0;
 
     public static Connection connect(String url) {
         return connect(url, Duration.ofMinutes(1));
@@ -23,7 +24,7 @@ public class JsonRpc {
         if (client == null)
             client = BUILDER.build();
 
-        return new Connection(client, HttpRequest.newBuilder().uri(URI.create(url)).timeout(requestTimeout), new GsonBuilder());
+        return new Connection("connection" + id++ + "-", client, HttpRequest.newBuilder().uri(URI.create(url)).timeout(requestTimeout), new GsonBuilder());
     }
 
     public static void setConnectionTimeout(Duration connectTimeout) {

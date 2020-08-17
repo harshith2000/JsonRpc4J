@@ -24,19 +24,22 @@ public class Connection {
     private final HttpClient client;
     private final HttpRequest.Builder reqBuilder;
     private final Gson jsonConverter;
+    private final String id;
+    private int nonce = 0;
 
-    public Connection(HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
+    public Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
         this.client = client;
         this.reqBuilder = reqBuilder.setHeader("Content-Type", "application/json");
         this.jsonConverter = gsonBuilder.serializeNulls().create();
+        this.id = id;
     }
 
     public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        return sendRequest(new Request("test", method, params));
+        return sendRequest(new Request(id + nonce++, method, params));
     }
 
     public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        return sendRequest(new Request("test", method, params));
+        return sendRequest(new Request(id + nonce++, method, params));
     }
 
     public JsonElement sendRequest(Request req) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
