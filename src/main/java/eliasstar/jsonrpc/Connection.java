@@ -35,14 +35,14 @@ public class Connection {
     }
 
     public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        return sendRequest(new Request(id + nonce++, method, params));
+        return sendRPCRequest(new Request(id + nonce++, method, params));
     }
 
     public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        return sendRequest(new Request(id + nonce++, method, params));
+        return sendRPCRequest(new Request(id + nonce++, method, params));
     }
 
-    public JsonElement sendRequest(Request req) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
+    public JsonElement sendRPCRequest(Request req) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
         var body = jsonConverter.toJson(req, Request.class);
         var httpReq = reqBuilder.POST(BodyPublishers.ofString(body)).build();
 
