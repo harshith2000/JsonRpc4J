@@ -22,29 +22,29 @@ import eliasstar.jsonrpc.objects.Response;
 public class Connection {
 
     private final HttpClient client;
-    private final HttpRequest.Builder reqBuilder;
+    private final HttpRequest.Builder requestBuilder;
     private final Gson jsonConverter;
-    private final String id;
-    private int nonce = 0;
+    private final String connectionId;
+    private int requestId = 0;
 
     public Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
         this.client = client;
-        this.reqBuilder = reqBuilder.setHeader("Content-Type", "application/json");
+        this.requestBuilder = reqBuilder.setHeader("Content-Type", "application/json");
         this.jsonConverter = gsonBuilder.serializeNulls().create();
-        this.id = id;
+        this.connectionId = id;
     }
 
     public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        return sendRPCRequest(new Request(id + nonce++, method, params));
+        return sendRPCRequest(new Request(connectionId + "-" + requestId++, method, params));
     }
 
     public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        return sendRPCRequest(new Request(id + nonce++, method, params));
+        return sendRPCRequest(new Request(connectionId + "-" + requestId++, method, params));
     }
 
     public JsonElement sendRPCRequest(Request req) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
         var body = jsonConverter.toJson(req, Request.class);
-        var httpReq = reqBuilder.POST(BodyPublishers.ofString(body)).build();
+        var httpReq = requestBuilder.POST(BodyPublishers.ofString(body)).build();
 
         HttpResponse<String> httpRes;
         try {
@@ -62,6 +62,10 @@ public class Connection {
             throw new RpcIdMismatchException(req.id(), res.id());
 
         return res.result();
+    }
+
+    public int requestsMade() {
+        return requestId;
     }
 
 }
