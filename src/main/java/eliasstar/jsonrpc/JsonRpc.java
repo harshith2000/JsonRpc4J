@@ -13,8 +13,9 @@ import com.google.gson.GsonBuilder;
 public class JsonRpc {
 
     private static final HttpClient.Builder BUILDER = HttpClient.newBuilder().cookieHandler(new CookieManager()).connectTimeout(Duration.ofMinutes(1));
-    private static HttpClient client;
+    public static final String CONNECTION_PREFIX = "con";
     private static int connectionId = 0;
+    private static HttpClient client;
 
     public static Connection connect(String url) {
         return connect(url, Duration.ofMinutes(1));
@@ -24,7 +25,7 @@ public class JsonRpc {
         if (client == null)
             client = BUILDER.build();
 
-        return new Connection("con" + connectionId++, client, HttpRequest.newBuilder().uri(URI.create(url)).timeout(requestTimeout), new GsonBuilder());
+        return new Connection(CONNECTION_PREFIX + connectionId++, client, HttpRequest.newBuilder().uri(URI.create(url)).timeout(requestTimeout), new GsonBuilder());
     }
 
     public static void setConnectionTimeout(Duration connectTimeout) {

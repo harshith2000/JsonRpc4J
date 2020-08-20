@@ -24,36 +24,19 @@ public class Connection {
     private final HttpClient client;
     private final HttpRequest.Builder requestBuilder;
     private final Gson jsonConverter;
-    private final String connectionId;
+    private final String id;
     private int requestId = 0;
 
     public Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
         this.client = client;
         this.requestBuilder = reqBuilder.setHeader("Content-Type", "application/json");
         this.jsonConverter = gsonBuilder.serializeNulls().create();
-        this.connectionId = id;
+        this.id = id;
     }
 
     public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        return sendRPCRequest(new Request(connectionId + "-" + requestId++, method, params));
-    }
-
-    public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        return sendRPCRequest(new Request(connectionId + "-" + requestId++, method, params));
-    }
-
-    public JsonElement sendRPCRequest(Request req) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        var body = jsonConverter.toJson(req, Request.class);
-        var httpReq = requestBuilder.POST(BodyPublishers.ofString(body)).build();
-
-        HttpResponse<String> httpRes;
-        try {
-            httpRes = client.send(httpReq, BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            throw new RpcConnectionException(e.getMessage(), e);
-        }
-
-        var res = jsonConverter.fromJson(httpRes.body(), Response.class);
+        var req = new Request(id + "-" + requestId++, method, params);
+        var res = sendRPCRequest(req);
 
         if (!res.isSuccessful())
             throw new RpcErrorException(res.error());
@@ -64,8 +47,39 @@ public class Connection {
         return res.result();
     }
 
+    public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
+        var req = new Request(id + "-" + requestId++, method, params);
+        var res = sendRPCRequest(req);
+
+        if (!res.isSuccessful())
+            throw new RpcErrorException(res.error());
+
+        if (res.id() != req.id())
+            throw new RpcIdMismatchException(req.id(), res.id());
+
+        return res.result();
+    }
+
+    public Response sendRPCRequest(Request req) throws RpcConnectionException {
+        var body = jsonConverter.toJson(req, Request.class);
+        var httpReq = requestBuilder.POST(BodyPublishers.ofString(body)).build();
+
+        HttpResponse<String> httpRes;
+        try {
+            httpRes = client.send(httpReq, BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RpcConnectionException(e.getMessage(), e);
+        }
+
+        return jsonConverter.fromJson(httpRes.body(), Response.class);
+    }
+
     public int requestsMade() {
         return requestId;
+    }
+
+    public String id() {
+        return id;
     }
 
 }
