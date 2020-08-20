@@ -13,10 +13,10 @@ public final class JsonRpcTests {
         var startCons = JsonRpc.connectionsMade();
 
         var con = JsonRpc.connect("https://www.example.com");
-        assertEquals(con.id(), JsonRpc.CONNECTION_PREFIX + startCons);
+        assertEquals(con.id, JsonRpc.CONNECTION_PREFIX + startCons);
 
         var con2 = JsonRpc.connect("https://www.example.com");
-        assertEquals(con2.id(), JsonRpc.CONNECTION_PREFIX + (startCons + 1));
+        assertEquals(con2.id, JsonRpc.CONNECTION_PREFIX + (startCons + 1));
 
         assertEquals(startCons + 2, JsonRpc.connectionsMade());
     }

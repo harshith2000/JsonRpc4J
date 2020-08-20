@@ -10,10 +10,10 @@ import java.time.Duration;
 
 import com.google.gson.GsonBuilder;
 
-public class JsonRpc {
+public final class JsonRpc {
 
     private static final HttpClient.Builder BUILDER = HttpClient.newBuilder().cookieHandler(new CookieManager()).connectTimeout(Duration.ofMinutes(1));
-    public static final String CONNECTION_PREFIX = "con";
+    static final String CONNECTION_PREFIX = "con";
     private static int connectionId = 0;
     private static HttpClient client;
 
@@ -40,7 +40,7 @@ public class JsonRpc {
         client = BUILDER.version(http).build();
     }
 
-    public static int connectionsMade() {
+    static int connectionsMade() {
         return connectionId;
     }
 

@@ -24,7 +24,7 @@ public class Connection {
     private final HttpClient client;
     private final HttpRequest.Builder requestBuilder;
     private final Gson jsonConverter;
-    private final String id;
+    final String id;
     private int requestId = 0;
 
     public Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
@@ -74,12 +74,21 @@ public class Connection {
         return jsonConverter.fromJson(httpRes.body(), Response.class);
     }
 
-    public int requestsMade() {
+    int requestsMade() {
         return requestId;
     }
 
-    public String id() {
-        return id;
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Connection))
+            return false;
+
+        Connection other = (Connection) obj;
+
+        if (this == other)
+            return true;
+
+        return client.equals(other.client) && requestBuilder.equals(other.requestBuilder) && jsonConverter.equals(other.jsonConverter) && id == other.id && requestId == other.requestId;
     }
 
 }
