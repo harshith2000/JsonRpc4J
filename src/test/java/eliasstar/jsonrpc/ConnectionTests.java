@@ -7,6 +7,7 @@ public final class ConnectionTests {
 
     @Test
     @DisplayName("")
-    public void test() {
+    public void testSendingOfRPC() {
+
     }
 }
