@@ -26,13 +26,11 @@ import javax.net.ssl.SSLParameters;
 
 public final class HttpClientMock extends HttpClient {
 
-    private boolean shouldSucceed;
-    private String id;
+    private String responseBody;
     private String requestBody;
 
-    public void setResponse(String id, boolean shouldSucceed) {
-        this.id = id;
-        this.shouldSucceed = shouldSucceed;
+    public void setResponse(String responseBody) {
+        this.responseBody = responseBody;
     }
 
     public String getRequest() {
@@ -64,8 +62,7 @@ public final class HttpClientMock extends HttpClient {
             }
         });
 
-        var resBody = shouldSucceed ? "{\"jsonrpc\": \"2.0\",\"id\": \"" + id + "\",\"result\": \"test\"}" : "{\"jsonrpc\": \"2.0\",\"id\": \"" + id + "\",\"error\": {\"code\":42069,\"message\": \"test\"}}";
-        var bodyBytes = ByteBuffer.wrap(resBody.getBytes());
+        var bodyBytes = ByteBuffer.wrap(responseBody.getBytes());
 
         var res = new HttpResponseMock<T>(req);
         var resSubscriber = handler.apply(res);

@@ -39,4 +39,16 @@ public class Request {
         return params;
     }
 
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Request))
+            return false;
+
+        Request other = (Request) obj;
+
+        if (this == other)
+            return true;
+
+        return jsonrpc.equals(other.jsonrpc) && id.equals(other.id) && method.equals(other.method) && params.equals(other.params);
+    }
+
 }

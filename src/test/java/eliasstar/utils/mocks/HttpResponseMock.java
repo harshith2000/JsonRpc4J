@@ -34,7 +34,7 @@ public final class HttpResponseMock<T> implements HttpResponse<T>, HttpResponse.
 
         map.put("Content-Type", Arrays.asList("application/json"));
 
-        return HttpHeaders.of(map, null);
+        return HttpHeaders.of(map, (a, b) -> true);
     }
 
     @Override
