@@ -8,10 +8,10 @@ public final class RpcErrorException extends RpcException {
 
     private static final long serialVersionUID = -6883031150212639037L;
 
-    private final int code;
+    private final long code;
     private final JsonElement data;
 
-    public RpcErrorException(int errorCode, String message) {
+    public RpcErrorException(long errorCode, String message) {
         this(errorCode, message, (JsonElement) null);
     }
 
@@ -19,14 +19,14 @@ public final class RpcErrorException extends RpcException {
         this(error.code(), error.message(), error.data());
     }
 
-    public RpcErrorException(int errorCode, String message, JsonElement data) {
+    public RpcErrorException(long errorCode, String message, JsonElement data) {
         super(message);
 
         this.code = errorCode;
         this.data = data;
     }
 
-    public RpcErrorException(int errorCode, String message, Throwable cause) {
+    public RpcErrorException(long errorCode, String message, Throwable cause) {
         this(errorCode, message, null, cause);
     }
 
@@ -34,14 +34,14 @@ public final class RpcErrorException extends RpcException {
         this(error.code(), error.message(), error.data(), cause);
     }
 
-    public RpcErrorException(int errorCode, String message, JsonElement data, Throwable cause) {
+    public RpcErrorException(long errorCode, String message, JsonElement data, Throwable cause) {
         super(message, cause);
 
         this.code = errorCode;
         this.data = data;
     }
 
-    public int getErrorCode() {
+    public long getErrorCode() {
         return code;
     }
 

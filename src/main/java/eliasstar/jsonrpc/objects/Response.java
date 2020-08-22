@@ -2,9 +2,11 @@ package eliasstar.jsonrpc.objects;
 
 import com.google.gson.JsonElement;
 
-public record Response(String jsonrpc, String id, JsonElement result, Error error) {
+import eliasstar.jsonrpc.objects.id.Id;
 
-    public static record Error(int code, String message, JsonElement data) {
+public record Response(String jsonrpc, Id<?> id, JsonElement result, Error error) {
+
+    public static record Error(long code, String message, JsonElement data) {
     }
 
     public boolean isSuccessful() {

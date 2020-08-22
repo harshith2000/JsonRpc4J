@@ -1,6 +1,7 @@
 package eliasstar.jsonrpc;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
@@ -35,7 +36,7 @@ public class Connection {
     }
 
     public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        var req = new Request(id + "-" + requestId++, method, params);
+        var req = id.equals(null) || id.equals("") ? new Request(new BigDecimal(requestId++), method, params) : new Request(id + "-" + requestId++, method, params);
         var res = sendRPCRequest(req);
 
         if (!res.isSuccessful())
@@ -48,7 +49,7 @@ public class Connection {
     }
 
     public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        var req = new Request(id + "-" + requestId++, method, params);
+        var req = id.equals(null) || id.equals("") ? new Request(new BigDecimal(requestId++), method, params) : new Request(id + "-" + requestId++, method, params);
         var res = sendRPCRequest(req);
 
         if (!res.isSuccessful())
@@ -80,15 +81,10 @@ public class Connection {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Connection))
-            return false;
+        if (obj instanceof Connection other)
+            return this == other || client.equals(other.client) && requestBuilder.equals(other.requestBuilder) && jsonConverter.equals(other.jsonConverter) && id == other.id && requestId == other.requestId;
 
-        Connection other = (Connection) obj;
-
-        if (this == other)
-            return true;
-
-        return client.equals(other.client) && requestBuilder.equals(other.requestBuilder) && jsonConverter.equals(other.jsonConverter) && id == other.id && requestId == other.requestId;
+        return false;
     }
 
 }
