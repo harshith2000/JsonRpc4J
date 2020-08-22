@@ -41,7 +41,7 @@ public class Connection {
         if (!res.isSuccessful())
             throw new RpcErrorException(res.error());
 
-        if (res.id() != req.id())
+        if (!res.id().equals(req.id()))
             throw new RpcIdMismatchException(req.id(), res.id());
 
         return res.result();
@@ -54,7 +54,7 @@ public class Connection {
         if (!res.isSuccessful())
             throw new RpcErrorException(res.error());
 
-        if (res.id() != req.id())
+        if (!res.id().equals(req.id()))
             throw new RpcIdMismatchException(req.id(), res.id());
 
         return res.result();

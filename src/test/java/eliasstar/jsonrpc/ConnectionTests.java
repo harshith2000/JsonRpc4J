@@ -2,12 +2,13 @@ package eliasstar.jsonrpc;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import eliasstar.jsonrpc.exceptions.RpcConnectionException;
 import eliasstar.jsonrpc.exceptions.RpcErrorException;
 import eliasstar.jsonrpc.exceptions.RpcIdMismatchException;
 import eliasstar.jsonrpc.objects.Request;
@@ -30,37 +30,31 @@ public final class ConnectionTests {
     @BeforeAll
     public static void initConnection() {
         client = new HttpClientMock();
-        con = new Connection("test", client, HttpRequest.newBuilder().uri(URI.create("https://www.example.com")), new Gson().newBuilder());
+        con = new Connection("test", client, HttpRequest.newBuilder().uri(URI.create("https://www.example.com")), new GsonBuilder());
     }
 
     @RepeatedTest(3)
     @DisplayName("requestIds should increment")
     public void testRequestIds() {
-        try {
-            var reqCount = con.requestsMade();
+        var reqCount = con.requestsMade();
+        client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": \"test-" + reqCount + "\", \"result\": \"test\"}");
 
-            client.setResponse("{\"jsonrpc\": \"2.0\",\"id\": \"test-" + reqCount + "\",\"result\": \"test\"}");
+        assertDoesNotThrow(() -> {
             con.callRemoteProcedure("method", new JsonObject());
+        });
 
-            assertEquals(con.requestsMade(), ++reqCount);
-        } catch (RpcErrorException e) {
-            fail("client response not configured correctly", e);
-        } catch (RpcConnectionException e) {
-            fail("internal client error", e);
-        } catch (RpcIdMismatchException e) {
-            fail(e);
-        }
+        assertEquals(reqCount + 1, con.requestsMade());
     }
 
     @Test
     @DisplayName("request and response should correctly (de)serialize")
     public void testSendingRPC() {
-        var response = "{\"jsonrpc\": \"2.0\",\"id\": \"test\",\"result\": \"test\"}";
+        var response = "{\"jsonrpc\": \"2.0\", \"id\": \"test\", \"result\": \"test\"}";
         var request = new Request("test", "method", new JsonObject());
         client.setResponse(response);
 
         assertDoesNotThrow(() -> {
-            assertEquals(con.sendRPCRequest(request), new Gson().fromJson(response, Response.class));
+            assertEquals(new Gson().fromJson(response, Response.class), con.sendRPCRequest(request));
         });
 
         assertEquals(request, new Gson().fromJson(client.getRequest(), Request.class));
@@ -69,10 +63,20 @@ public final class ConnectionTests {
     @Test
     @DisplayName("wrong response id should throw exception")
     public void testWrongResponseId() {
+        client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": \"wrong\", \"result\": \"test\"}");
+
+        assertThrows(RpcIdMismatchException.class, () -> {
+            con.callRemoteProcedure("method", new JsonObject());
+        });
     }
 
     @Test
     @DisplayName("response with error should throw exception")
     public void testErrorResponse() {
+        client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": \"null\", \"error\": {\"code\": -32000, \"message\": \"test\"}}");
+
+        assertThrows(RpcErrorException.class, () -> {
+            con.callRemoteProcedure("method", new JsonObject());
+        });
     }
 }
