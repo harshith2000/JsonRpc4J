@@ -37,7 +37,7 @@ public class Connection {
     }
 
     public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        var req = id.equals(null) || id.equals("") ? new Request(new BigDecimal(requestId++), method, params) : new Request(id + "-" + requestId++, method, params);
+        var req = id.equals("") ? new Request(new BigDecimal(requestId++), method, params) : new Request(id + "-" + requestId++, method, params);
         var res = sendRPCRequest(req);
 
         if (!res.isSuccessful())
@@ -50,7 +50,7 @@ public class Connection {
     }
 
     public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        var req = id.equals(null) || id.equals("") ? new Request(new BigDecimal(requestId++), method, params) : new Request(id + "-" + requestId++, method, params);
+        var req = id.equals("") ? new Request(new BigDecimal(requestId++), method, params) : new Request(id + "-" + requestId++, method, params);
         var res = sendRPCRequest(req);
 
         if (!res.isSuccessful())
