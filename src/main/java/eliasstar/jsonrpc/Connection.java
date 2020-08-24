@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import eliasstar.jsonrpc.exceptions.RpcConnectionException;
 import eliasstar.jsonrpc.exceptions.RpcErrorException;
 import eliasstar.jsonrpc.exceptions.RpcIdMismatchException;
+import eliasstar.jsonrpc.gson.IdTypeAdapter;
 import eliasstar.jsonrpc.objects.Request;
 import eliasstar.jsonrpc.objects.Response;
 
@@ -31,7 +32,7 @@ public class Connection {
     public Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
         this.client = client;
         this.requestBuilder = reqBuilder.setHeader("Content-Type", "application/json");
-        this.jsonConverter = gsonBuilder.serializeNulls().create();
+        this.jsonConverter = gsonBuilder.registerTypeHierarchyAdapter(IdTypeAdapter.type(), IdTypeAdapter.instance()).serializeNulls().create();
         this.id = id;
     }
 

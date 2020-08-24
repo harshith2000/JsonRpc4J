@@ -1,15 +1,14 @@
 package eliasstar.jsonrpc.gson;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import eliasstar.jsonrpc.objects.id.NumberId;
 import eliasstar.jsonrpc.objects.id.Id;
+import eliasstar.jsonrpc.objects.id.NumberId;
 import eliasstar.jsonrpc.objects.id.StringId;
 
 public class IdTypeAdapter extends TypeAdapter<Id<?>> {
@@ -27,7 +26,7 @@ public class IdTypeAdapter extends TypeAdapter<Id<?>> {
         return instance;
     }
 
-    public static Type type() {
+    public static Class<?> type() {
         return Id.class;
     }
 

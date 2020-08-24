@@ -26,11 +26,15 @@ public final class ConnectionTests {
 
     private static HttpClientMock client;
     private static Connection con;
+    private static Gson gson;
 
     @BeforeAll
     public static void initConnection() {
         client = new HttpClientMock();
-        con = new Connection("test", client, HttpRequest.newBuilder().uri(URI.create("https://www.example.com")), new GsonBuilder());
+        var gsonBuilder = new GsonBuilder();
+        con = new Connection("test", client, HttpRequest.newBuilder().uri(URI.create("https://www.example.com")), gsonBuilder);
+
+        gson = gsonBuilder.create();
     }
 
     @RepeatedTest(3)
@@ -54,10 +58,10 @@ public final class ConnectionTests {
         client.setResponse(response);
 
         assertDoesNotThrow(() -> {
-            assertEquals(new Gson().fromJson(response, Response.class), con.sendRPCRequest(request));
+            assertEquals(gson.fromJson(response, Response.class), con.sendRPCRequest(request));
         });
 
-        assertEquals(request, new Gson().fromJson(client.getRequest(), Request.class));
+        assertEquals(request, gson.fromJson(client.getRequest(), Request.class));
     }
 
     @Test
