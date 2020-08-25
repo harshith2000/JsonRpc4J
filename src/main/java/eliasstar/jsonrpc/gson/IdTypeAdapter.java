@@ -11,7 +11,7 @@ import eliasstar.jsonrpc.objects.id.Id;
 import eliasstar.jsonrpc.objects.id.NumberId;
 import eliasstar.jsonrpc.objects.id.StringId;
 
-public class IdTypeAdapter extends TypeAdapter<Id<?>> {
+public final class IdTypeAdapter extends TypeAdapter<Id<?>> {
 
     private static IdTypeAdapter instance;
 

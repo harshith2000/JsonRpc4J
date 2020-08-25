@@ -23,11 +23,21 @@ public final class StringId implements Id<String> {
     }
 
     @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        if (obj instanceof StringId other)
+        if (obj != null && obj instanceof StringId other)
             return this == other || id.equals(other.id);
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return id;
     }
 
 }

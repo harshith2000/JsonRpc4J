@@ -6,7 +6,7 @@ import eliasstar.jsonrpc.objects.id.Id;
 
 public record Response(String jsonrpc, Id<?> id, JsonElement result, Error error) {
 
-    public static record Error(long code, String message, JsonElement data) {
+    public record Error(long code, String message, JsonElement data) {
     }
 
     public boolean isSuccessful() {

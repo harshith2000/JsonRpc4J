@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpRequest;
 
@@ -67,7 +66,7 @@ public final class ConnectionTests {
         var stringRequest = new Request("test", "method", new JsonObject());
 
         var numberResponse = "{\"jsonrpc\": \"2.0\", \"id\": 0, \"result\": \"test\"}";
-        var numberRequest = new Request(new BigDecimal(0), "method", new JsonObject());
+        var numberRequest = new Request(0, "method", new JsonObject());
 
         assertDoesNotThrow(() -> {
             client.setResponse(stringResponse);
