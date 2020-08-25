@@ -46,7 +46,7 @@ public final class Request {
 
     private Request(Id<?> id, String method, Parameter<?> params) {
         this.id = id;
-        this.method = method;
+        this.method = Objects.requireNonNull(method);
         this.params = params;
     }
 
@@ -73,8 +73,21 @@ public final class Request {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof Request other)
-            return this == other || jsonrpc.equals(other.jsonrpc) && id.equals(other.id) && method.equals(other.method) && params.equals(other.params);
+        if (obj != null && obj instanceof Request other) {
+            if (this == other)
+                return true;
+
+            if (id != null && params != null)
+                return jsonrpc.equals(other.jsonrpc) && id.equals(other.id) && method.equals(other.method) && params.equals(other.params);
+
+            if (params != null)
+                return jsonrpc.equals(other.jsonrpc) && method.equals(other.method) && params.equals(other.params);
+
+            if (id != null)
+                return jsonrpc.equals(other.jsonrpc) && id.equals(other.id) && method.equals(other.method);
+
+            return jsonrpc.equals(other.jsonrpc) && method.equals(other.method);
+        }
 
         return false;
     }
@@ -85,9 +98,15 @@ public final class Request {
 
         sb.append("{");
         sb.append("\"jsonrpc\": \"" + jsonrpc + "\"");
-        sb.append(", \"id\": " + id.toString());
+
+        if (id != null)
+            sb.append(", \"id\": " + id.toString());
+
         sb.append(", \"method\": \"" + method + "\"");
-        sb.append(", \"params\": " + params.toString());
+
+        if (params != null)
+            sb.append(", \"params\": " + params.toString());
+
         sb.append("}");
 
         return sb.toString();

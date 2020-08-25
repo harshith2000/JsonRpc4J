@@ -1,6 +1,7 @@
 package eliasstar.jsonrpc.objects.parameter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import com.google.gson.JsonArray;
 import com.google.gson.internal.Streams;
@@ -11,7 +12,7 @@ public final class ArrayParameter implements Parameter<JsonArray> {
     private final JsonArray params;
 
     public ArrayParameter(JsonArray params) {
-        this.params = params;
+        this.params = Objects.requireNonNull(params);
     }
 
     @Override

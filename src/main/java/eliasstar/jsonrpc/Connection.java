@@ -32,7 +32,7 @@ public class Connection {
     public Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
         this.client = client;
         this.requestBuilder = reqBuilder.setHeader("Content-Type", "application/json");
-        this.jsonConverter = gsonBuilder.registerTypeHierarchyAdapter(IdTypeAdapter.type(), IdTypeAdapter.instance()).registerTypeHierarchyAdapter(ParameterTypeAdapter.type(), ParameterTypeAdapter.instance()).serializeNulls().create();
+        this.jsonConverter = gsonBuilder.registerTypeHierarchyAdapter(IdTypeAdapter.type(), IdTypeAdapter.instance()).registerTypeHierarchyAdapter(ParameterTypeAdapter.type(), ParameterTypeAdapter.instance()).create();
         this.id = id;
     }
 

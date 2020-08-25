@@ -2,6 +2,7 @@ package eliasstar.jsonrpc.objects.id;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import com.google.gson.stream.JsonWriter;
 
@@ -10,7 +11,7 @@ public final class NumberId implements Id<BigDecimal> {
     private final BigDecimal id;
 
     public NumberId(BigDecimal id) {
-        this.id = id;
+        this.id = Objects.requireNonNull(id);
     }
 
     @Override

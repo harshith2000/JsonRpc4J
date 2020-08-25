@@ -1,6 +1,7 @@
 package eliasstar.jsonrpc.objects.id;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import com.google.gson.stream.JsonWriter;
 
@@ -9,7 +10,7 @@ public final class StringId implements Id<String> {
     private final String id;
 
     public StringId(String id) {
-        this.id = id;
+        this.id = Objects.requireNonNull(id);
     }
 
     @Override
