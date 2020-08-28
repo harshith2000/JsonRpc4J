@@ -8,26 +8,22 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import eliasstar.jsonrpc.objects.id.Id;
+import eliasstar.jsonrpc.objects.id.NullId;
 import eliasstar.jsonrpc.objects.id.NumberId;
 import eliasstar.jsonrpc.objects.id.StringId;
 
-public final class IdTypeAdapter extends TypeAdapter<Id<?>> {
+final class IdTypeAdapter extends TypeAdapter<Id<?>> {
 
     private static IdTypeAdapter instance;
 
     private IdTypeAdapter() {
     }
 
-    public static IdTypeAdapter instance() {
-        if (instance == null) {
+    static IdTypeAdapter instance() {
+        if (instance == null)
             instance = new IdTypeAdapter();
-        }
 
         return instance;
-    }
-
-    public static Class<?> type() {
-        return Id.class;
     }
 
     @Override
@@ -44,8 +40,11 @@ public final class IdTypeAdapter extends TypeAdapter<Id<?>> {
         case NUMBER:
             return new NumberId(new BigDecimal(in.nextString()));
 
+        case NULL:
+            return NullId.instance();
+
         default:
-            throw new RuntimeException("Expected string or number, not " + in.peek());
+            throw new RuntimeException("Expected string, number or null, not " + in.peek());
         }
     }
 

@@ -13,11 +13,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import eliasstar.gson.OptionalTypeAdapterFactory;
 import eliasstar.jsonrpc.exceptions.RpcConnectionException;
 import eliasstar.jsonrpc.exceptions.RpcErrorException;
 import eliasstar.jsonrpc.exceptions.RpcIdMismatchException;
-import eliasstar.jsonrpc.gson.IdTypeAdapter;
-import eliasstar.jsonrpc.gson.ParameterTypeAdapter;
+import eliasstar.jsonrpc.gson.RpcTypeAdapterFactory;
 import eliasstar.jsonrpc.objects.Request;
 import eliasstar.jsonrpc.objects.Response;
 
@@ -32,34 +32,47 @@ public class Connection {
     public Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
         this.client = client;
         this.requestBuilder = reqBuilder.setHeader("Content-Type", "application/json");
-        this.jsonConverter = gsonBuilder.registerTypeHierarchyAdapter(IdTypeAdapter.type(), IdTypeAdapter.instance()).registerTypeHierarchyAdapter(ParameterTypeAdapter.type(), ParameterTypeAdapter.instance()).create();
+        this.jsonConverter = gsonBuilder.registerTypeAdapterFactory(OptionalTypeAdapterFactory.instance()).registerTypeAdapterFactory(RpcTypeAdapterFactory.instance()).serializeNulls().create();
         this.id = id;
     }
 
-    public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        var req = id.equals("") ? new Request(requestId++, method, params) : new Request(id + "-" + requestId++, method, params);
+    public JsonElement callRemoteProcedure(String method) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
+        var req = id.equals("") ? new Request(requestId++, method) : new Request(id + "-" + requestId++, method);
         var res = sendRPCRequest(req);
 
-        if (!res.isSuccessful())
-            throw new RpcErrorException(res.error());
+        if (res.isUnsuccessful())
+            throw new RpcErrorException(res.error().get());
 
-        if (!res.id().equals(req.id()))
-            throw new RpcIdMismatchException(req.id(), res.id());
+        if (!res.id().equals(req.id().get()))
+            throw new RpcIdMismatchException(req.id().get(), res.id());
 
-        return res.result();
+        return res.result().get();
     }
 
     public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
         var req = id.equals("") ? new Request(requestId++, method, params) : new Request(id + "-" + requestId++, method, params);
         var res = sendRPCRequest(req);
 
-        if (!res.isSuccessful())
-            throw new RpcErrorException(res.error());
+        if (res.isUnsuccessful())
+            throw new RpcErrorException(res.error().get());
 
-        if (!res.id().equals(req.id()))
-            throw new RpcIdMismatchException(req.id(), res.id());
+        if (!res.id().equals(req.id().get()))
+            throw new RpcIdMismatchException(req.id().get(), res.id());
 
-        return res.result();
+        return res.result().get();
+    }
+
+    public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
+        var req = id.equals("") ? new Request(requestId++, method, params) : new Request(id + "-" + requestId++, method, params);
+        var res = sendRPCRequest(req);
+
+        if (res.isUnsuccessful())
+            throw new RpcErrorException(res.error().get());
+
+        if (!res.id().equals(req.id().get()))
+            throw new RpcIdMismatchException(req.id().get(), res.id());
+
+        return res.result().get();
     }
 
     public Response sendRPCRequest(Request req) throws RpcConnectionException {

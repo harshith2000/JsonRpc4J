@@ -11,23 +11,18 @@ import eliasstar.jsonrpc.objects.parameter.ArrayParameter;
 import eliasstar.jsonrpc.objects.parameter.ObjectParameter;
 import eliasstar.jsonrpc.objects.parameter.Parameter;
 
-public final class ParameterTypeAdapter extends TypeAdapter<Parameter<?>> {
+final class ParameterTypeAdapter extends TypeAdapter<Parameter<?>> {
 
     private static ParameterTypeAdapter instance;
 
     private ParameterTypeAdapter() {
     }
 
-    public static ParameterTypeAdapter instance() {
-        if (instance == null) {
+    static ParameterTypeAdapter instance() {
+        if (instance == null)
             instance = new ParameterTypeAdapter();
-        }
 
         return instance;
-    }
-
-    public static Class<?> type() {
-        return Parameter.class;
     }
 
     @Override

@@ -21,8 +21,6 @@ public final class HttpResponseMock<T> implements HttpResponse<T>, HttpResponse.
         this.req = req;
     }
 
-    // #region ResponseInfo
-
     @Override
     public int statusCode() {
         return 200;
@@ -41,8 +39,6 @@ public final class HttpResponseMock<T> implements HttpResponse<T>, HttpResponse.
     public Version version() {
         return req.version().isPresent() ? req.version().get() : null;
     }
-
-    // #endregion
 
     void body(T body) {
         this.body = body;

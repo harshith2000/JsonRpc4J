@@ -9,7 +9,6 @@ import java.net.http.HttpRequest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -49,10 +48,10 @@ public final class ConnectionTests {
 
         assertDoesNotThrow(() -> {
             client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": \"test-" + stringReqCount + "\", \"result\": \"test\"}");
-            stringCon.callRemoteProcedure("method", new JsonObject());
+            stringCon.callRemoteProcedure("method");
 
             client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": " + numberReqCount + ", \"result\": \"test\"}");
-            numberCon.callRemoteProcedure("method", new JsonObject());
+            numberCon.callRemoteProcedure("method");
         });
 
         assertEquals(stringReqCount + 1, stringCon.requestsMade());
@@ -63,10 +62,10 @@ public final class ConnectionTests {
     @DisplayName("request and response should correctly (de)serialize")
     public void testSendingRPC() {
         var stringResponse = "{\"jsonrpc\": \"2.0\", \"id\": \"test\", \"result\": \"test\"}";
-        var stringRequest = new Request("test", "method", new JsonObject());
+        var stringRequest = new Request("test", "method");
 
         var numberResponse = "{\"jsonrpc\": \"2.0\", \"id\": 0, \"result\": \"test\"}";
-        var numberRequest = new Request(0, "method", new JsonObject());
+        var numberRequest = new Request(0, "method");
 
         assertDoesNotThrow(() -> {
             client.setResponse(stringResponse);
@@ -85,11 +84,11 @@ public final class ConnectionTests {
         client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": \"wrong\", \"result\": \"test\"}");
 
         assertThrows(RpcIdMismatchException.class, () -> {
-            stringCon.callRemoteProcedure("method", new JsonObject());
+            stringCon.callRemoteProcedure("method");
         });
 
         assertThrows(RpcIdMismatchException.class, () -> {
-            numberCon.callRemoteProcedure("method", new JsonObject());
+            numberCon.callRemoteProcedure("method");
         });
     }
 
@@ -99,11 +98,11 @@ public final class ConnectionTests {
         client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": \"null\", \"error\": {\"code\": -32000, \"message\": \"test\"}}");
 
         assertThrows(RpcErrorException.class, () -> {
-            stringCon.callRemoteProcedure("method", new JsonObject());
+            stringCon.callRemoteProcedure("method");
         });
 
         assertThrows(RpcErrorException.class, () -> {
-            numberCon.callRemoteProcedure("method", new JsonObject());
+            numberCon.callRemoteProcedure("method");
         });
     }
 }

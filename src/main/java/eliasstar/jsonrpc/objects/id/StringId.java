@@ -38,7 +38,7 @@ public final class StringId implements Id<String> {
 
     @Override
     public String toString() {
-        return id;
+        return '"' + id + '"';
     }
 
 }

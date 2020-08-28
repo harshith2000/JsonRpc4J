@@ -2,59 +2,68 @@ package eliasstar.jsonrpc.objects;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import eliasstar.jsonrpc.objects.id.Id;
+import eliasstar.jsonrpc.objects.id.NullId;
 import eliasstar.jsonrpc.objects.id.NumberId;
 import eliasstar.jsonrpc.objects.id.StringId;
 import eliasstar.jsonrpc.objects.parameter.ArrayParameter;
 import eliasstar.jsonrpc.objects.parameter.ObjectParameter;
 import eliasstar.jsonrpc.objects.parameter.Parameter;
 
-public final class Request {
+public class Request {
 
     private final String jsonrpc = "2.0";
-    private final Id<?> id;
+    private final Optional<Id<?>> id;
     private final String method;
-    private final Parameter<?> params;
+    private final Optional<Parameter<?>> params;
 
-    public Request(String id, String method, JsonObject params) {
-        this(new StringId(id), method, new ObjectParameter(params));
+    @SuppressWarnings("unused") // Used indirectly by GSON
+    private Request() {
+        this.id = Optional.empty();
+        this.method = "";
+        this.params = Optional.empty();
+    }
+
+    protected Request(Id<?> id, String method, Parameter<?> params) {
+        this.id = Optional.ofNullable(id);
+        this.method = Objects.requireNonNull(method);
+        this.params = Optional.ofNullable(params);
+    }
+
+    public Request(String id, String method) {
+        this(id != null ? new StringId(id) : NullId.instance(), method, null);
     }
 
     public Request(String id, String method, JsonArray params) {
-        this(new StringId(id), method, new ArrayParameter(params));
+        this(id != null ? new StringId(id) : NullId.instance(), method, new ArrayParameter(params));
     }
 
-    public Request(long id, String method, JsonObject params) {
-        this(new NumberId(new BigDecimal(id)), method, new ObjectParameter(params));
+    public Request(String id, String method, JsonObject params) {
+        this(id != null ? new StringId(id) : NullId.instance(), method, new ObjectParameter(params));
     }
 
-    public Request(long id, String method, JsonArray params) {
-        this(new NumberId(new BigDecimal(id)), method, new ArrayParameter(params));
+    public Request(Number id, String method) {
+        this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, null);
     }
 
-    public Request(double id, String method, JsonObject params) {
-        this(new NumberId(new BigDecimal(id)), method, new ObjectParameter(params));
+    public Request(Number id, String method, JsonArray params) {
+        this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, new ArrayParameter(params));
     }
 
-    public Request(double id, String method, JsonArray params) {
-        this(new NumberId(new BigDecimal(id)), method, new ArrayParameter(params));
-    }
-
-    private Request(Id<?> id, String method, Parameter<?> params) {
-        this.id = id;
-        this.method = Objects.requireNonNull(method);
-        this.params = params;
+    public Request(Number id, String method, JsonObject params) {
+        this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, new ObjectParameter(params));
     }
 
     public String jsonrpc() {
         return jsonrpc;
     }
 
-    public Id<?> id() {
+    public Optional<Id<?>> id() {
         return id;
     }
 
@@ -62,7 +71,7 @@ public final class Request {
         return method;
     }
 
-    public Parameter<?> params() {
+    public Optional<Parameter<?>> params() {
         return params;
     }
 
@@ -73,21 +82,8 @@ public final class Request {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof Request other) {
-            if (this == other)
-                return true;
-
-            if (id != null && params != null)
-                return jsonrpc.equals(other.jsonrpc) && id.equals(other.id) && method.equals(other.method) && params.equals(other.params);
-
-            if (params != null)
-                return jsonrpc.equals(other.jsonrpc) && method.equals(other.method) && params.equals(other.params);
-
-            if (id != null)
-                return jsonrpc.equals(other.jsonrpc) && id.equals(other.id) && method.equals(other.method);
-
-            return jsonrpc.equals(other.jsonrpc) && method.equals(other.method);
-        }
+        if (obj != null && obj instanceof Request other)
+            return this == other || jsonrpc.equals(other.jsonrpc) && id.equals(other.id) && method.equals(other.method) && params.equals(other.params);
 
         return false;
     }
@@ -98,15 +94,9 @@ public final class Request {
 
         sb.append("{");
         sb.append("\"jsonrpc\": \"" + jsonrpc + "\"");
-
-        if (id != null)
-            sb.append(", \"id\": " + id.toString());
-
+        id.ifPresent(i -> sb.append(", \"id\": " + i.toString()));
         sb.append(", \"method\": \"" + method + "\"");
-
-        if (params != null)
-            sb.append(", \"params\": " + params.toString());
-
+        params.ifPresent(p -> sb.append(", \"params\": " + p.toString()));
         sb.append("}");
 
         return sb.toString();
