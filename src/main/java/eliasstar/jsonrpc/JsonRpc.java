@@ -1,21 +1,19 @@
 package eliasstar.jsonrpc;
 
 import java.net.CookieManager;
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpClient.Version;
 import java.time.Duration;
 
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
 
 public final class JsonRpc {
 
+    private static final String CONNECTION_PREFIX = "con";
     private static final HttpClient.Builder BUILDER = HttpClient.newBuilder().cookieHandler(new CookieManager()).connectTimeout(Duration.ofMinutes(1));
-    static final String CONNECTION_PREFIX = "con";
-    private static int connectionId = 0;
     private static HttpClient client;
+    private static int connectionId = 0;
 
     public static Connection connect(String url) {
         return connect(url, Duration.ofMinutes(1));
@@ -25,7 +23,7 @@ public final class JsonRpc {
         if (client == null)
             client = BUILDER.build();
 
-        return new Connection(CONNECTION_PREFIX + connectionId++, client, HttpRequest.newBuilder().uri(URI.create(url)).timeout(requestTimeout), new GsonBuilder());
+        return new ConnectionBuilder(client, url).withId(CONNECTION_PREFIX + connectionId++).setGson(new Gson()).build();
     }
 
     public static void setConnectionTimeout(Duration connectTimeout) {
@@ -38,10 +36,6 @@ public final class JsonRpc {
 
     public static void setHttpVersion(Version http) {
         client = BUILDER.version(http).build();
-    }
-
-    static int connectionsMade() {
-        return connectionId;
     }
 
 }

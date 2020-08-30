@@ -4,101 +4,107 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
-import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.Objects;
+import java.util.Optional;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import eliasstar.gson.OptionalTypeAdapterFactory;
-import eliasstar.jsonrpc.exceptions.RpcConnectionException;
-import eliasstar.jsonrpc.exceptions.RpcErrorException;
-import eliasstar.jsonrpc.exceptions.RpcIdMismatchException;
-import eliasstar.jsonrpc.gson.RpcTypeAdapterFactory;
+import eliasstar.jsonrpc.exceptions.ConnectionException;
+import eliasstar.jsonrpc.exceptions.ErrorException;
+import eliasstar.jsonrpc.exceptions.IdMismatchException;
+import eliasstar.jsonrpc.objects.Notification;
 import eliasstar.jsonrpc.objects.Request;
 import eliasstar.jsonrpc.objects.Response;
 
 public class Connection {
 
     private final HttpClient client;
-    private final HttpRequest.Builder requestBuilder;
-    private final Gson jsonConverter;
-    final String id;
-    private int requestId = 0;
+    private final HttpRequest.Builder reqBuilder;
+    private final Gson gson;
+    private final Optional<String> id;
+    private int requestId;
 
-    public Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, GsonBuilder gsonBuilder) {
-        this.client = client;
-        this.requestBuilder = reqBuilder.setHeader("Content-Type", "application/json");
-        this.jsonConverter = gsonBuilder.registerTypeAdapterFactory(OptionalTypeAdapterFactory.instance()).registerTypeAdapterFactory(RpcTypeAdapterFactory.instance()).serializeNulls().create();
-        this.id = id;
+    Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, Gson gson) {
+        this.id = Optional.ofNullable(id);
+        this.client = Objects.requireNonNull(client);
+        this.reqBuilder = Objects.requireNonNull(reqBuilder);
+        this.gson = Objects.requireNonNull(gson);
     }
 
-    public JsonElement callRemoteProcedure(String method) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        var req = id.equals("") ? new Request(requestId++, method) : new Request(id + "-" + requestId++, method);
-        var res = sendRPCRequest(req);
+    public Response sendRequest(Request req) throws ConnectionException {
+        Objects.requireNonNull(req);
 
-        if (res.isUnsuccessful())
-            throw new RpcErrorException(res.error().get());
+        var res = send(gson.toJson(req));
 
-        if (!res.id().equals(req.id().get()))
-            throw new RpcIdMismatchException(req.id().get(), res.id());
+        if (req instanceof Notification)
+            return null;
 
-        return res.result().get();
+        return gson.fromJson(res, Response.class);
     }
 
-    public JsonElement callRemoteProcedure(String method, JsonArray params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        var req = id.equals("") ? new Request(requestId++, method, params) : new Request(id + "-" + requestId++, method, params);
-        var res = sendRPCRequest(req);
-
-        if (res.isUnsuccessful())
-            throw new RpcErrorException(res.error().get());
-
-        if (!res.id().equals(req.id().get()))
-            throw new RpcIdMismatchException(req.id().get(), res.id());
-
-        return res.result().get();
+    public JsonElement callRemoteProcedure(String method) throws ConnectionException, ErrorException, IdMismatchException {
+        var req = id.map(i -> new Request(i + requestId++, method)).orElse(new Request(requestId++, method));
+        return checkResponse(req, sendRequest(req));
     }
 
-    public JsonElement callRemoteProcedure(String method, JsonObject params) throws RpcConnectionException, RpcErrorException, RpcIdMismatchException {
-        var req = id.equals("") ? new Request(requestId++, method, params) : new Request(id + "-" + requestId++, method, params);
-        var res = sendRPCRequest(req);
-
-        if (res.isUnsuccessful())
-            throw new RpcErrorException(res.error().get());
-
-        if (!res.id().equals(req.id().get()))
-            throw new RpcIdMismatchException(req.id().get(), res.id());
-
-        return res.result().get();
+    public JsonElement callRemoteProcedure(String method, JsonArray params) throws ConnectionException, ErrorException, IdMismatchException {
+        var req = id.map(i -> new Request(i + requestId++, method, params)).orElse(new Request(requestId++, method, params));
+        return checkResponse(req, sendRequest(req));
     }
 
-    public Response sendRPCRequest(Request req) throws RpcConnectionException {
-        var body = jsonConverter.toJson(req, Request.class);
-        var httpReq = requestBuilder.POST(BodyPublishers.ofString(body)).build();
+    public JsonElement callRemoteProcedure(String method, JsonObject params) throws ConnectionException, ErrorException, IdMismatchException {
+        var req = id.map(i -> new Request(i + requestId++, method, params)).orElse(new Request(requestId++, method, params));
+        return checkResponse(req, sendRequest(req));
+    }
 
-        HttpResponse<String> httpRes;
+    public void sendNotification(String method) throws ConnectionException {
+        sendRequest(new Notification(method));
+    }
+
+    public void sendNotification(String method, JsonArray params) throws ConnectionException {
+        sendRequest(new Notification(method, params));
+    }
+
+    public void sendNotification(String method, JsonObject params) throws ConnectionException {
+        sendRequest(new Notification(method, params));
+    }
+
+    public Response[] sendBatchRequest(Request... requests) throws ConnectionException {
+        Objects.requireNonNull(requests);
+
+        if (requests.length == 0)
+            return null;
+
+        var res = send(gson.toJson(requests));
+
+        // ? is this working
+        if (requests instanceof Notification[])
+            return null;
+
+        return gson.fromJson(res, Response[].class);
+    }
+
+    private String send(String content) throws ConnectionException {
         try {
-            httpRes = client.send(httpReq, BodyHandlers.ofString());
+            var httpReq = reqBuilder.POST(BodyPublishers.ofString(content)).build();
+            return client.send(httpReq, BodyHandlers.ofString()).body();
         } catch (IOException | InterruptedException e) {
-            throw new RpcConnectionException(e.getMessage(), e);
+            throw new ConnectionException(e);
         }
-
-        return jsonConverter.fromJson(httpRes.body(), Response.class);
     }
 
-    int requestsMade() {
-        return requestId;
-    }
+    private JsonElement checkResponse(Request req, Response res) throws ErrorException, IdMismatchException {
+        if (res.isUnsuccessful())
+            throw new ErrorException(res.error().get());
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj != null && obj instanceof Connection other)
-            return this == other || client.equals(other.client) && requestBuilder.equals(other.requestBuilder) && jsonConverter.equals(other.jsonConverter) && id == other.id && requestId == other.requestId;
+        if (!req.id().get().equals(res.id()))
+            throw new IdMismatchException(req.id().get(), res.id());
 
-        return false;
+        return res.result().get();
     }
 
 }
