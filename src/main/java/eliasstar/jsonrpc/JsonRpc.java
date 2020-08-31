@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 
 public final class JsonRpc {
 
-    private static final String CONNECTION_PREFIX = "con";
+    static final String CONNECTION_PREFIX = "con";
     private static final HttpClient.Builder BUILDER = HttpClient.newBuilder().cookieHandler(new CookieManager()).connectTimeout(Duration.ofMinutes(1));
     private static HttpClient client;
     private static int connectionId = 0;
@@ -36,6 +36,10 @@ public final class JsonRpc {
 
     public static void setHttpVersion(Version http) {
         client = BUILDER.version(http).build();
+    }
+
+    static int connectionsMade() {
+        return connectionId;
     }
 
 }

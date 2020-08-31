@@ -107,6 +107,10 @@ public class Connection {
         return res.result().get();
     }
 
+    Optional<String> id() {
+        return id;
+    }
+
     int requestsMade() {
         return requestId;
     }

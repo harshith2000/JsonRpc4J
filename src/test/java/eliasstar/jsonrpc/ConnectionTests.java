@@ -9,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -42,9 +43,14 @@ public final class ConnectionTests {
 
     }
 
-    @Test
-    public void testRequestIdIncrementation() {
+    @RepeatedTest(3)
+    public void testRequestIdIncrementation() throws ConnectionException, ErrorResponseException, IdMismatchException {
+        var id = connection.requestsMade();
 
+        client.setResponse("{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"result\":\"test\"}");
+        connection.callRemoteProcedure("test");
+
+        assertEquals(id + 1, connection.requestsMade());
     }
 
     @Test

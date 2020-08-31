@@ -1,13 +1,18 @@
 package eliasstar.jsonrpc;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.RepeatedTest;
 
 public final class JsonRpcTests {
 
-    @Test
+    @RepeatedTest(3)
     public void testConnectionIdIncrementation() {
+        var consMade = JsonRpc.connectionsMade();
 
+        var con = JsonRpc.connect("https://www.example.com");
+
+        assertEquals(JsonRpc.CONNECTION_PREFIX + consMade, con.id().get());
     }
 
-    // ? Maybe more regarding client settings
 }
