@@ -1,14 +1,13 @@
 package eliasstar.jsonrpc;
 
+import org.junit.jupiter.api.Test;
+
 public final class JsonRpcTests {
 
-    // @RepeatedTest(3)
-    // @DisplayName("connectionIds should increment")
-    // public void testConnectionIds() {
-    // var conCount = JsonRpc.connectionsMade();
-    // var con = JsonRpc.connect("https://www.example.com");
+    @Test
+    public void testConnectionIdIncrementation() {
 
-    // assertEquals(con.id, JsonRpc.CONNECTION_PREFIX + conCount++);
-    // assertEquals(conCount, JsonRpc.connectionsMade());
-    // }
+    }
+
+    // ? Maybe more regarding client settings
 }

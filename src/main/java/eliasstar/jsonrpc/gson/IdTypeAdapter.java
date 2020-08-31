@@ -41,6 +41,7 @@ final class IdTypeAdapter extends TypeAdapter<Id<?>> {
             return new NumberId(new BigDecimal(in.nextString()));
 
         case NULL:
+            in.nextNull();
             return NullId.instance();
 
         default:

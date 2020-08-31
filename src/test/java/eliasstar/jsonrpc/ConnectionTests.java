@@ -1,109 +1,127 @@
 package eliasstar.jsonrpc;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.net.URI;
-import java.net.http.HttpRequest;
-
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
-import eliasstar.gson.OptionalTypeAdapterFactory;
-import eliasstar.jsonrpc.exceptions.ErrorException;
+import eliasstar.jsonrpc.exceptions.ConnectionException;
+import eliasstar.jsonrpc.exceptions.ErrorResponseException;
 import eliasstar.jsonrpc.exceptions.IdMismatchException;
-import eliasstar.jsonrpc.gson.RpcTypeAdapterFactory;
 import eliasstar.jsonrpc.objects.Request;
-import eliasstar.jsonrpc.objects.Response;
+import eliasstar.utils.GsonProvider;
 import eliasstar.utils.mocks.HttpClientMock;
 
 public final class ConnectionTests {
 
     private static HttpClientMock client;
-    private static Connection stringCon;
-    private static Connection numberCon;
+    private static Connection connection;
     private static Gson gson;
 
     @BeforeAll
     public static void initConnection() {
         client = new HttpClientMock();
-        gson = new GsonBuilder().registerTypeAdapterFactory(RpcTypeAdapterFactory.instance()).registerTypeAdapterFactory(OptionalTypeAdapterFactory.instance()).serializeNulls().create();
-        var reqBuilder = HttpRequest.newBuilder().uri(URI.create("https://www.example.com"));
-
-        stringCon = new Connection("test", client, reqBuilder, gson);
-        numberCon = new Connection(null, client, reqBuilder, gson);
-    }
-
-    // @RepeatedTest(3)
-    // @DisplayName("requestIds should increment")
-    // public void testRequestIds() {
-    // var stringReqCount = stringCon.requestsMade();
-    // var numberReqCount = numberCon.requestsMade();
-
-    // assertDoesNotThrow(() -> {
-    // client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": \"test-" + stringReqCount
-    // + "\", \"result\": \"test\"}");
-    // stringCon.callRemoteProcedure("method");
-
-    // client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": " + numberReqCount + ",
-    // \"result\": \"test\"}");
-    // numberCon.callRemoteProcedure("method");
-    // });
-
-    // assertEquals(stringReqCount + 1, stringCon.requestsMade());
-    // assertEquals(numberReqCount + 1, numberCon.requestsMade());
-    // }
-
-    @Test
-    @DisplayName("request and response should correctly (de)serialize")
-    public void testSendingRPC() {
-        var stringResponse = "{\"jsonrpc\": \"2.0\", \"id\": \"test\", \"result\": \"test\"}";
-        var stringRequest = new Request("test", "method");
-
-        var numberResponse = "{\"jsonrpc\": \"2.0\", \"id\": 0, \"result\": \"test\"}";
-        var numberRequest = new Request(0, "method");
-
-        assertDoesNotThrow(() -> {
-            client.setResponse(stringResponse);
-            assertEquals(gson.fromJson(stringResponse, Response.class), stringCon.sendRequest(stringRequest));
-            assertEquals(stringRequest, gson.fromJson(client.getRequest(), Request.class));
-
-            client.setResponse(numberResponse);
-            assertEquals(gson.fromJson(numberResponse, Response.class), numberCon.sendRequest(numberRequest));
-            assertEquals(numberRequest, gson.fromJson(client.getRequest(), Request.class));
-        });
+        connection = new ConnectionBuilder(client, "https://www.example.com").build();
+        gson = GsonProvider.gson();
     }
 
     @Test
-    @DisplayName("wrong response id should throw exception")
-    public void testWrongResponseId() {
-        client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": \"wrong\", \"result\": \"test\"}");
+    public void testRequestSending() {
+
+    }
+
+    @Test
+    public void testConnectionWithId() {
+
+    }
+
+    @Test
+    public void testRequestIdIncrementation() {
+
+    }
+
+    @Test
+    public void testRemoteProcedureCalling() {
+        var cases = new Executable[] {
+                () -> {
+                    var id = connection.requestsMade();
+                    client.setResponse("{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"result\":\"test\"}");
+                    connection.callRemoteProcedure("test");
+                    assertEquals(new Request(id, "test"), gson.fromJson(client.getRequest(), Request.class));
+                },
+                () -> {
+                    var id = connection.requestsMade();
+                    client.setResponse("{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"result\":\"test\"}");
+                    connection.callRemoteProcedure("test", new JsonArray());
+                    assertEquals(new Request(id, "test", new JsonArray()), gson.fromJson(client.getRequest(), Request.class));
+                },
+                () -> {
+                    var id = connection.requestsMade();
+                    client.setResponse("{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"result\":\"test\"}");
+                    connection.callRemoteProcedure("test", new JsonObject());
+                    assertEquals(new Request(id, "test", new JsonObject()), gson.fromJson(client.getRequest(), Request.class));
+                }
+        };
+
+        assertAll(cases);
+    }
+
+    @Test
+    public void testCorrectResponse() throws ConnectionException, ErrorResponseException, IdMismatchException {
+        client.setResponse("{\"jsonrpc\":\"2.0\",\"id\":" + connection.requestsMade() + ",\"result\":\"test\"}");
+        assertEquals("test", connection.callRemoteProcedure("test").getAsString());
+    }
+
+    @Test
+    public void testResponseWithWrongId() {
+        client.setResponse("{\"jsonrpc\":\"2.0\",\"id\":\"wrong\",\"result\":\"test\"}");
 
         assertThrows(IdMismatchException.class, () -> {
-            stringCon.callRemoteProcedure("method");
-        });
-
-        assertThrows(IdMismatchException.class, () -> {
-            numberCon.callRemoteProcedure("method");
+            connection.callRemoteProcedure("method");
         });
     }
 
     @Test
-    @DisplayName("response with error should throw exception")
-    public void testErrorResponse() {
-        client.setResponse("{\"jsonrpc\": \"2.0\", \"id\": \"null\", \"error\": {\"code\": -32000, \"message\": \"test\"}}");
+    public void testResponseWithError() {
+        client.setResponse("{\"jsonrpc\":\"2.0\",\"id\":\"null\",\"error\":{\"code\":-32000,\"message\":\"test\"}}");
 
-        assertThrows(ErrorException.class, () -> {
-            stringCon.callRemoteProcedure("method");
-        });
-
-        assertThrows(ErrorException.class, () -> {
-            numberCon.callRemoteProcedure("method");
+        assertThrows(ErrorResponseException.class, () -> {
+            connection.callRemoteProcedure("method");
         });
     }
+
+    @Test
+    public void testNotificationSending() {
+        client.setResponse("");
+
+        var cases = new Executable[] {
+                () -> {
+                    connection.sendNotification("test");
+                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\"}", client.getRequest());
+                },
+                () -> {
+                    connection.sendNotification("test", new JsonArray());
+                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",params:[]}", client.getRequest());
+                },
+                () -> {
+                    connection.sendNotification("test", new JsonObject());
+                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",params:{}}", client.getRequest());
+                }
+        };
+
+        assertAll(cases);
+    }
+
+    @Test
+    public void testBatchRequestSending() {
+
+    }
+
 }

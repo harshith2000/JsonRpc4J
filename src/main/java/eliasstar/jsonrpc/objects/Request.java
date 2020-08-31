@@ -17,19 +17,18 @@ import eliasstar.jsonrpc.objects.parameter.Parameter;
 
 public class Request {
 
-    private final String jsonrpc = "2.0";
+    private final String jsonrpc;
     private final Optional<Id<?>> id;
     private final String method;
     private final Optional<Parameter<?>> params;
 
     @SuppressWarnings("unused") // Used indirectly by GSON
     private Request() {
-        this.id = Optional.empty();
-        this.method = "";
-        this.params = Optional.empty();
+        this((Id<?>) null, "", (Parameter<?>) null);
     }
 
     protected Request(Id<?> id, String method, Parameter<?> params) {
+        this.jsonrpc = "2.0";
         this.id = Optional.ofNullable(id);
         this.method = Objects.requireNonNull(method);
         this.params = Optional.ofNullable(params);
@@ -90,12 +89,19 @@ public class Request {
 
     @Override
     public String toString() {
+        return "Request@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString();
+    }
+
+    protected String contentAsJsonString() {
         StringBuilder sb = new StringBuilder();
 
         sb.append("{");
         sb.append("\"jsonrpc\": \"" + jsonrpc + "\"");
+
         id.ifPresent(i -> sb.append(", \"id\": " + i.toString()));
+
         sb.append(", \"method\": \"" + method + "\"");
+
         params.ifPresent(p -> sb.append(", \"params\": " + p.toString()));
         sb.append("}");
 

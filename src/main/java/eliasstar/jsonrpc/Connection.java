@@ -14,7 +14,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import eliasstar.jsonrpc.exceptions.ConnectionException;
-import eliasstar.jsonrpc.exceptions.ErrorException;
+import eliasstar.jsonrpc.exceptions.ErrorResponseException;
 import eliasstar.jsonrpc.exceptions.IdMismatchException;
 import eliasstar.jsonrpc.objects.Notification;
 import eliasstar.jsonrpc.objects.Request;
@@ -46,17 +46,17 @@ public class Connection {
         return gson.fromJson(res, Response.class);
     }
 
-    public JsonElement callRemoteProcedure(String method) throws ConnectionException, ErrorException, IdMismatchException {
+    public JsonElement callRemoteProcedure(String method) throws ConnectionException, ErrorResponseException, IdMismatchException {
         var req = id.map(i -> new Request(i + requestId++, method)).orElse(new Request(requestId++, method));
         return checkResponse(req, sendRequest(req));
     }
 
-    public JsonElement callRemoteProcedure(String method, JsonArray params) throws ConnectionException, ErrorException, IdMismatchException {
+    public JsonElement callRemoteProcedure(String method, JsonArray params) throws ConnectionException, ErrorResponseException, IdMismatchException {
         var req = id.map(i -> new Request(i + requestId++, method, params)).orElse(new Request(requestId++, method, params));
         return checkResponse(req, sendRequest(req));
     }
 
-    public JsonElement callRemoteProcedure(String method, JsonObject params) throws ConnectionException, ErrorException, IdMismatchException {
+    public JsonElement callRemoteProcedure(String method, JsonObject params) throws ConnectionException, ErrorResponseException, IdMismatchException {
         var req = id.map(i -> new Request(i + requestId++, method, params)).orElse(new Request(requestId++, method, params));
         return checkResponse(req, sendRequest(req));
     }
@@ -97,14 +97,18 @@ public class Connection {
         }
     }
 
-    private JsonElement checkResponse(Request req, Response res) throws ErrorException, IdMismatchException {
+    private JsonElement checkResponse(Request req, Response res) throws ErrorResponseException, IdMismatchException {
         if (res.isUnsuccessful())
-            throw new ErrorException(res.error().get());
+            throw new ErrorResponseException(res.error().get());
 
         if (!req.id().get().equals(res.id()))
             throw new IdMismatchException(req.id().get(), res.id());
 
         return res.result().get();
+    }
+
+    int requestsMade() {
+        return requestId;
     }
 
 }

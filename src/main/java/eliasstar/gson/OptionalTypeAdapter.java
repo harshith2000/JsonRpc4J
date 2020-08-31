@@ -23,13 +23,16 @@ final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
     @Override
     public void write(JsonWriter out, Optional<?> value) throws IOException {
         var serialize = out.getSerializeNulls();
-        out.setSerializeNulls(false);
 
         var json = value.map(x -> gson.toJsonTree(x));
-        if (json.isPresent())
+
+        if (json.isPresent()) {
+            out.setSerializeNulls(true);
             Streams.write(json.get(), out);
-        else
+        } else {
+            out.setSerializeNulls(false);
             out.nullValue();
+        }
 
         out.setSerializeNulls(serialize);
     }
