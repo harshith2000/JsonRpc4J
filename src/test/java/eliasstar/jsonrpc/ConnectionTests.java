@@ -105,7 +105,7 @@ public final class ConnectionTests {
 
     @Test
     public void testNotificationSending() {
-        client.setResponse("");
+        client.setResponse("test");
 
         var cases = new Executable[] {
                 () -> {
@@ -114,11 +114,11 @@ public final class ConnectionTests {
                 },
                 () -> {
                     connection.sendNotification("test", new JsonArray());
-                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",params:[]}", client.getRequest());
+                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[]}", client.getRequest());
                 },
                 () -> {
                     connection.sendNotification("test", new JsonObject());
-                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",params:{}}", client.getRequest());
+                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{}}", client.getRequest());
                 }
         };
 
