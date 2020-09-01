@@ -98,11 +98,11 @@ public class Request {
         sb.append("{");
         sb.append("\"jsonrpc\": \"" + jsonrpc + "\"");
 
-        id.ifPresent(i -> sb.append(", \"id\": " + i.toString()));
+        id.ifPresent(i -> sb.append(", \"id\": " + i));
 
         sb.append(", \"method\": \"" + method + "\"");
 
-        params.ifPresent(p -> sb.append(", \"params\": " + p.toString()));
+        params.ifPresent(p -> sb.append(", \"params\": " + p));
         sb.append("}");
 
         return sb.toString();

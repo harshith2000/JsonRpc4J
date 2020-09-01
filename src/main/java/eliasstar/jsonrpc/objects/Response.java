@@ -24,4 +24,22 @@ public record Response(String jsonrpc, Id<?> id, Optional<JsonElement> result, O
         return error.isPresent();
     }
 
+    @Override
+    public String toString() {
+        return "Response@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString();
+    }
+
+    protected String contentAsJsonString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{");
+        sb.append("\"jsonrpc\": \"" + jsonrpc + "\"");
+        sb.append(", \"id\": " + id);
+        result.ifPresent(r -> sb.append(", \"result\": " + r));
+        error.ifPresent(e -> sb.append(", \"error\": " + e));
+        sb.append("}");
+
+        return sb.toString();
+    }
+
 }

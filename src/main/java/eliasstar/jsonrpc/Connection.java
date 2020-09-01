@@ -5,8 +5,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -47,17 +49,17 @@ public class Connection {
     }
 
     public JsonElement callRemoteProcedure(String method) throws ConnectionException, ErrorResponseException, IdMismatchException {
-        var req = id.map(i -> new Request(i + requestId++, method)).orElse(new Request(requestId++, method));
+        var req = id.map(i -> new Request(i + "-" + requestId++, method)).orElse(new Request(requestId++, method));
         return checkResponse(req, sendRequest(req));
     }
 
     public JsonElement callRemoteProcedure(String method, JsonArray params) throws ConnectionException, ErrorResponseException, IdMismatchException {
-        var req = id.map(i -> new Request(i + requestId++, method, params)).orElse(new Request(requestId++, method, params));
+        var req = id.map(i -> new Request(i + "-" + requestId++, method, params)).orElse(new Request(requestId++, method, params));
         return checkResponse(req, sendRequest(req));
     }
 
     public JsonElement callRemoteProcedure(String method, JsonObject params) throws ConnectionException, ErrorResponseException, IdMismatchException {
-        var req = id.map(i -> new Request(i + requestId++, method, params)).orElse(new Request(requestId++, method, params));
+        var req = id.map(i -> new Request(i + "-" + requestId++, method, params)).orElse(new Request(requestId++, method, params));
         return checkResponse(req, sendRequest(req));
     }
 
@@ -81,8 +83,11 @@ public class Connection {
 
         var res = send(gson.toJson(requests));
 
-        // ? is this working
-        if (requests instanceof Notification[])
+        Supplier<Boolean> allNotification = () -> Arrays.asList(requests).stream().allMatch(req -> {
+            return req instanceof Notification;
+        });
+
+        if (requests instanceof Notification[] || allNotification.get())
             return null;
 
         return gson.fromJson(res, Response[].class);

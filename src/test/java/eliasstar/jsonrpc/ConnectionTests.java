@@ -3,10 +3,14 @@ package eliasstar.jsonrpc;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.RepeatedTest;
@@ -16,7 +20,9 @@ import org.junit.jupiter.api.function.Executable;
 import eliasstar.jsonrpc.exceptions.ConnectionException;
 import eliasstar.jsonrpc.exceptions.ErrorResponseException;
 import eliasstar.jsonrpc.exceptions.IdMismatchException;
+import eliasstar.jsonrpc.objects.Notification;
 import eliasstar.jsonrpc.objects.Request;
+import eliasstar.jsonrpc.objects.Response;
 import eliasstar.utils.GsonProvider;
 import eliasstar.utils.mocks.HttpClientMock;
 
@@ -34,13 +40,35 @@ public final class ConnectionTests {
     }
 
     @Test
-    public void testRequestSending() {
+    public void testRequestSending() throws ConnectionException {
+        var id = connection.requestsMade();
 
+        var req = new Request(id, "test");
+        var res = "{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"result\":\"test\"}";
+        client.setResponse(res);
+
+        assertEquals(gson.fromJson(res, Response.class), connection.sendRequest(req));
+        assertEquals(req, gson.fromJson(client.getRequest(), Request.class));
     }
 
     @Test
-    public void testConnectionWithId() {
+    public void testNotificationRequestSending() throws ConnectionException {
+        var req = new Notification("test");
+        client.setResponse("test");
 
+        assertEquals(null, connection.sendRequest(req));
+        assertEquals(req, gson.fromJson(client.getRequest(), Notification.class));
+        assertEquals(req, gson.fromJson(client.getRequest(), Request.class));
+    }
+
+    @Test
+    public void testConnectionWithId() throws ConnectionException, ErrorResponseException, IdMismatchException {
+        var con = new ConnectionBuilder(client, "https://www.example.com").withId("test").build();
+
+        client.setResponse("{\"jsonrpc\":\"2.0\",\"id\":\"test-0\",\"result\":\"test\"}");
+        con.callRemoteProcedure("test");
+
+        assertEquals(new Request("test-0", "test"), gson.fromJson(client.getRequest(), Request.class));
     }
 
     @RepeatedTest(3)
@@ -126,8 +154,35 @@ public final class ConnectionTests {
     }
 
     @Test
-    public void testBatchRequestSending() {
+    public void testBatchRequestSending() throws ConnectionException {
+        var req = new Request[] {
+                new Request("test1", "test1"),
+                new Request("test2", "test2"),
+                new Request("test3", "test3")
+        };
+        var res = "[{\"jsonrpc\":\"2.0\",\"id\":\"test1\",\"result\":\"test1\"},{\"jsonrpc\":\"2.0\",\"id\":\"test2\",\"result\":\"test2\"},{\"jsonrpc\":\"2.0\",\"id\":\"test3\",\"result\":\"test3\"}]";
 
+        client.setResponse(res);
+
+        assertTrue(Arrays.equals(gson.fromJson(res, Response[].class), connection.sendBatchRequest(req)));
+        assertTrue(Arrays.equals(req, gson.fromJson(client.getRequest(), Request[].class)));
+    }
+
+    @Test
+    public void testBatchNotificationSending() throws ConnectionException {
+        client.setResponse("test");
+
+        assertEquals(null, connection.sendBatchRequest(new Notification[] {
+                new Notification("test1"),
+                new Notification("test2"),
+                new Notification("test3")
+        }));
+
+        assertEquals(null, connection.sendBatchRequest(new Request[] {
+                new Notification("test1"),
+                new Notification("test2"),
+                new Notification("test3")
+        }));
     }
 
 }
