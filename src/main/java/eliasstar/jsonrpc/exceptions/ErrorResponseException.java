@@ -6,22 +6,22 @@ import com.google.gson.JsonElement;
 
 import eliasstar.jsonrpc.objects.Error;
 
-public final class ErrorException extends RpcException {
+public final class ErrorResponseException extends RpcException {
 
     private static final long serialVersionUID = 6883031150212639037L;
 
     private final long code;
     private final Optional<JsonElement> data;
 
-    public ErrorException(Error error) {
+    public ErrorResponseException(Error error) {
         this(error.code(), error.message(), error.data().orElse(null));
     }
 
-    public ErrorException(long code, String message) {
+    public ErrorResponseException(long code, String message) {
         this(code, message, null);
     }
 
-    public ErrorException(long code, String message, JsonElement data) {
+    public ErrorResponseException(long code, String message, JsonElement data) {
         super(message);
         this.code = code;
         this.data = Optional.ofNullable(data);

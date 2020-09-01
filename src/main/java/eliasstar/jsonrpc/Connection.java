@@ -5,8 +5,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -14,7 +16,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import eliasstar.jsonrpc.exceptions.ConnectionException;
-import eliasstar.jsonrpc.exceptions.ErrorException;
+import eliasstar.jsonrpc.exceptions.ErrorResponseException;
 import eliasstar.jsonrpc.exceptions.IdMismatchException;
 import eliasstar.jsonrpc.objects.Notification;
 import eliasstar.jsonrpc.objects.Request;
@@ -46,18 +48,18 @@ public class Connection {
         return gson.fromJson(res, Response.class);
     }
 
-    public JsonElement callRemoteProcedure(String method) throws ConnectionException, ErrorException, IdMismatchException {
-        var req = id.map(i -> new Request(i + requestId++, method)).orElse(new Request(requestId++, method));
+    public JsonElement callRemoteProcedure(String method) throws ConnectionException, ErrorResponseException, IdMismatchException {
+        var req = id.map(i -> new Request(i + "-" + requestId++, method)).orElse(new Request(requestId++, method));
         return checkResponse(req, sendRequest(req));
     }
 
-    public JsonElement callRemoteProcedure(String method, JsonArray params) throws ConnectionException, ErrorException, IdMismatchException {
-        var req = id.map(i -> new Request(i + requestId++, method, params)).orElse(new Request(requestId++, method, params));
+    public JsonElement callRemoteProcedure(String method, JsonArray params) throws ConnectionException, ErrorResponseException, IdMismatchException {
+        var req = id.map(i -> new Request(i + "-" + requestId++, method, params)).orElse(new Request(requestId++, method, params));
         return checkResponse(req, sendRequest(req));
     }
 
-    public JsonElement callRemoteProcedure(String method, JsonObject params) throws ConnectionException, ErrorException, IdMismatchException {
-        var req = id.map(i -> new Request(i + requestId++, method, params)).orElse(new Request(requestId++, method, params));
+    public JsonElement callRemoteProcedure(String method, JsonObject params) throws ConnectionException, ErrorResponseException, IdMismatchException {
+        var req = id.map(i -> new Request(i + "-" + requestId++, method, params)).orElse(new Request(requestId++, method, params));
         return checkResponse(req, sendRequest(req));
     }
 
@@ -81,8 +83,11 @@ public class Connection {
 
         var res = send(gson.toJson(requests));
 
-        // ? is this working
-        if (requests instanceof Notification[])
+        Supplier<Boolean> allNotification = () -> Arrays.asList(requests).stream().allMatch(req -> {
+            return req instanceof Notification;
+        });
+
+        if (requests instanceof Notification[] || allNotification.get())
             return null;
 
         return gson.fromJson(res, Response[].class);
@@ -97,14 +102,22 @@ public class Connection {
         }
     }
 
-    private JsonElement checkResponse(Request req, Response res) throws ErrorException, IdMismatchException {
+    private JsonElement checkResponse(Request req, Response res) throws ErrorResponseException, IdMismatchException {
         if (res.isUnsuccessful())
-            throw new ErrorException(res.error().get());
+            throw new ErrorResponseException(res.error().get());
 
         if (!req.id().get().equals(res.id()))
             throw new IdMismatchException(req.id().get(), res.id());
 
         return res.result().get();
+    }
+
+    Optional<String> id() {
+        return id;
+    }
+
+    int requestsMade() {
+        return requestId;
     }
 
 }

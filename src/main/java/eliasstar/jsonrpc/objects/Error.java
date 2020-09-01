@@ -12,4 +12,21 @@ public record Error(long code, String message, Optional<JsonElement> data) {
         this.message = "";
         this.data = Optional.empty();
     }
+
+    @Override
+    public String toString() {
+        return "Error@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString();
+    }
+
+    protected String contentAsJsonString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{");
+        sb.append("\"code\": \"" + code + "\"");
+        sb.append(", \"message\": " + message);
+        data.ifPresent(d -> sb.append(", \"data\": " + d.toString()));
+        sb.append("}");
+
+        return sb.toString();
+    }
 }

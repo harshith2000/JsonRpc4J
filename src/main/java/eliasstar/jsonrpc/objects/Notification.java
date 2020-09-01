@@ -10,6 +10,11 @@ import eliasstar.jsonrpc.objects.parameter.Parameter;
 
 public final class Notification extends Request {
 
+    @SuppressWarnings("unused") // Used indirectly by GSON
+    private Notification() {
+        this("");
+    }
+
     public Notification(String method) {
         super((Id<?>) null, method, (Parameter<?>) null);
     }
@@ -20,6 +25,22 @@ public final class Notification extends Request {
 
     public Notification(String method, JsonObject params) {
         super(null, method, new ObjectParameter(params));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof Notification other)
+            return this == other || jsonrpc().equals(other.jsonrpc())
+                    && id().equals(other.id())
+                    && method().equals(other.method())
+                    && params().equals(other.params());
+
+        return super.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        return "Notification@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString();
     }
 
 }
