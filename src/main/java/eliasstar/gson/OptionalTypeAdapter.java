@@ -10,9 +10,21 @@ import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+/**
+ * Gson {@link TypeAdapter} for {@link Optional}.
+ * <p>
+ * Serializes value if present or else omits field entirely.
+ *
+ * @author Elias*
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
 
+    /** The {@link Gson} instance to which this adapter is registered. */
     private final Gson gson;
+
+    /** The {@link Type} of the optionals value. */
     private final Type typeOfOptional;
 
     OptionalTypeAdapter(Gson gson, Type typeOfOptional) {
@@ -20,11 +32,19 @@ final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
         this.typeOfOptional = typeOfOptional;
     }
 
+    /**
+     * Writes one JSON value (an array, object, string, number, boolean or null) for
+     * the value of {@code optional}.
+     *
+     * @param out The {@link JsonWriter} used as output
+     * @param optional The {@link Optional} which is serialized
+     * @throws IOException If serialization fails
+     */
     @Override
-    public void write(JsonWriter out, Optional<?> value) throws IOException {
+    public void write(JsonWriter out, Optional<?> optional) throws IOException {
         var serialize = out.getSerializeNulls();
 
-        var json = value.map(x -> gson.toJsonTree(x));
+        var json = optional.map(x -> gson.toJsonTree(x));
 
         if (json.isPresent()) {
             out.setSerializeNulls(true);
@@ -37,6 +57,14 @@ final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
         out.setSerializeNulls(serialize);
     }
 
+    /**
+     * Reads one JSON value (an array, object, string, number, boolean or null) and
+     * converts it to an {@link Optional} containing the value.
+     *
+     * @param in The {@link JsonReader} used as input
+     * @return An {@link Optional} containing the read value
+     * @throws IOException If deserialization fails
+     */
     @Override
     public Optional<?> read(JsonReader in) throws IOException {
         return Optional.ofNullable(gson.fromJson(in, typeOfOptional));

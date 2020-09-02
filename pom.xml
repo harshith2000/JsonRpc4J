@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>EliasStar</groupId>
   <artifactId>WebUntis-JAW4J</artifactId>
-  <version>1.0</version>
+  <version>0.1.0</version>
   <properties>
     <maven.compiler.source>14</maven.compiler.source>
     <maven.compiler.target>14</maven.compiler.target>
