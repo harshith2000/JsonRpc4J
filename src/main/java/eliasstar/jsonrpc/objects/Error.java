@@ -8,9 +8,7 @@ public record Error(long code, String message, Optional<JsonElement> data) {
 
     @SuppressWarnings("unused") // Used indirectly by GSON
     private Error() {
-        this.code = 0;
-        this.message = "";
-        this.data = Optional.empty();
+        this(0, "", Optional.empty());
     }
 
     @Override

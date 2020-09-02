@@ -10,10 +10,7 @@ public record Response(String jsonrpc, Id<?> id, Optional<JsonElement> result, O
 
     @SuppressWarnings("unused") // Used indirectly by GSON
     private Response() {
-        this.jsonrpc = "2.0";
-        this.id = null;
-        this.result = Optional.empty();
-        this.error = Optional.empty();
+        this("2.0", null, Optional.empty(), Optional.empty());
     }
 
     public boolean isSuccessful() {
