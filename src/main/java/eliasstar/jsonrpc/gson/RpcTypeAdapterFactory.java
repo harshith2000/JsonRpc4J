@@ -6,7 +6,7 @@ import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 
 import eliasstar.jsonrpc.objects.id.Id;
-import eliasstar.jsonrpc.objects.parameter.Parameter;
+import eliasstar.jsonrpc.objects.parameter.Parameters;
 
 /**
  * Gson {@link TypeAdapterFactory} for {@link IdTypeAdapter} and {@link ParameterTypeAdapter}.
@@ -44,7 +44,7 @@ public final class RpcTypeAdapterFactory implements TypeAdapterFactory {
      * <p>
      * The {@link IdTypeAdapter} singleton instance if the type implements {@link Id}.
      * <p>
-     * The {@link ParameterTypeAdapter} singleton instance if the type implements {@link Parameter}.
+     * The {@link ParameterTypeAdapter} singleton instance if the type implements {@link Parameters}.
      * <p>
      *
      * @param <T> The type for which a {@link TypeAdapter} is needed
@@ -58,7 +58,7 @@ public final class RpcTypeAdapterFactory implements TypeAdapterFactory {
         if (Id.class.isAssignableFrom(type.getRawType()))
             return (TypeAdapter<T>) IdTypeAdapter.instance();
 
-        if (Parameter.class.isAssignableFrom(type.getRawType()))
+        if (Parameters.class.isAssignableFrom(type.getRawType()))
             return (TypeAdapter<T>) ParameterTypeAdapter.instance();
 
         return null;

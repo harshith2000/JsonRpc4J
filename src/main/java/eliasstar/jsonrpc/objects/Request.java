@@ -11,9 +11,9 @@ import eliasstar.jsonrpc.objects.id.Id;
 import eliasstar.jsonrpc.objects.id.NullId;
 import eliasstar.jsonrpc.objects.id.NumberId;
 import eliasstar.jsonrpc.objects.id.StringId;
-import eliasstar.jsonrpc.objects.parameter.ArrayParameter;
-import eliasstar.jsonrpc.objects.parameter.ObjectParameter;
-import eliasstar.jsonrpc.objects.parameter.Parameter;
+import eliasstar.jsonrpc.objects.parameter.ArrayParameters;
+import eliasstar.jsonrpc.objects.parameter.ObjectParameters;
+import eliasstar.jsonrpc.objects.parameter.Parameters;
 
 /**
  * Represents a JSON-RPC request.
@@ -44,12 +44,12 @@ public class Request {
     private final String method;
 
     /** Specifies the parameters of this {@link Request}. */
-    private final Optional<Parameter<?>> params;
+    private final Optional<Parameters<?>> params;
 
     /** Used indirectly by GSON */
     @SuppressWarnings("unused")
     private Request() {
-        this((Id<?>) null, "", (Parameter<?>) null);
+        this((Id<?>) null, "", (Parameters<?>) null);
     }
 
     /**
@@ -59,7 +59,7 @@ public class Request {
      * @param method Must not be null
      * @param params If null the {@link Request} has no params
      */
-    protected Request(Id<?> id, String method, Parameter<?> params) {
+    protected Request(Id<?> id, String method, Parameters<?> params) {
         this.jsonrpc = "2.0";
         this.id = Optional.ofNullable(id);
         this.method = Objects.requireNonNull(method);
@@ -93,7 +93,7 @@ public class Request {
      * @param params The parameters provided as {@link JsonArray}
      */
     public Request(String id, String method, JsonArray params) {
-        this(id != null ? new StringId(id) : NullId.instance(), method, new ArrayParameter(params));
+        this(id != null ? new StringId(id) : NullId.instance(), method, new ArrayParameters(params));
     }
 
     /**
@@ -110,7 +110,7 @@ public class Request {
      * @param params The parameters provided as {@link JsonObject}
      */
     public Request(String id, String method, JsonObject params) {
-        this(id != null ? new StringId(id) : NullId.instance(), method, new ObjectParameter(params));
+        this(id != null ? new StringId(id) : NullId.instance(), method, new ObjectParameters(params));
     }
 
     /**
@@ -140,7 +140,7 @@ public class Request {
      * @param params The parameters provided as {@link JsonArray}
      */
     public Request(Number id, String method, JsonArray params) {
-        this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, new ArrayParameter(params));
+        this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, new ArrayParameters(params));
     }
 
     /**
@@ -157,7 +157,7 @@ public class Request {
      * @param params The parameters provided as {@link JsonObject}
      */
     public Request(Number id, String method, JsonObject params) {
-        this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, new ObjectParameter(params));
+        this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, new ObjectParameters(params));
     }
 
     /**
@@ -197,7 +197,7 @@ public class Request {
     *
     * @return The parameters of this {@link Request}
     */
-    public Optional<Parameter<?>> params() {
+    public Optional<Parameters<?>> params() {
         return params;
     }
 

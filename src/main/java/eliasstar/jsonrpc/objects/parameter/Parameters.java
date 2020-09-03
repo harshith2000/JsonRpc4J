@@ -1,4 +1,4 @@
-package eliasstar.jsonrpc.objects.id;
+package eliasstar.jsonrpc.objects.parameter;
 
 import java.io.IOException;
 import java.util.function.Supplier;
@@ -6,18 +6,18 @@ import java.util.function.Supplier;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * Represents the id in a JSON-RPC request.
+ * Represents the params in a JSON-RPC request.
  * <p>
- * Its three implementations {@link StringId}, {@link NumberId} and {@link NullId}
- * cover the possible JSON types of String, Number and null literal.
+ * Its two implementations {@link ArrayParameters} and {@link ObjectParameters}
+ * cover the possible JSON types of Object and Array.
  *
- * @param <T> Type of id
+ * @param <T> Type of parameter
  * @author Elias*
  * @version 0.1.0
  * @since 0.1.0
- * @see <a href="https://www.jsonrpc.org/specification">JSON-RPC Specification</a>
+ * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC Specification</a>
  */
-public interface Id<T> extends Supplier<T> {
+public interface Parameters<T> extends Supplier<T> {
 
     /**
      * Writes one JSON value (an array, object, string, number, boolean or null).

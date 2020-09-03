@@ -7,18 +7,18 @@ import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import eliasstar.jsonrpc.objects.parameter.ArrayParameter;
-import eliasstar.jsonrpc.objects.parameter.ObjectParameter;
-import eliasstar.jsonrpc.objects.parameter.Parameter;
+import eliasstar.jsonrpc.objects.parameter.ArrayParameters;
+import eliasstar.jsonrpc.objects.parameter.ObjectParameters;
+import eliasstar.jsonrpc.objects.parameter.Parameters;
 
 /**
- * Gson {@link TypeAdapter} for classes implementing {@link Parameter}.
+ * Gson {@link TypeAdapter} for classes implementing {@link Parameters}.
  *
  * @author Elias*
  * @version 0.1.0
  * @since 0.1.0
  */
-final class ParameterTypeAdapter extends TypeAdapter<Parameter<?>> {
+final class ParameterTypeAdapter extends TypeAdapter<Parameters<?>> {
 
     /** The singleton instance. */
     private static ParameterTypeAdapter instance;
@@ -46,30 +46,30 @@ final class ParameterTypeAdapter extends TypeAdapter<Parameter<?>> {
     * Writes one JSON value (an array, object, string, number, boolean or null) for value.
     *
     * @param out The {@link JsonWriter} used as output
-    * @param value The {@link Parameter} which is serialized
+    * @param value The {@link Parameters} which is serialized
     * @throws IOException If serialization fails
     */
     @Override
-    public void write(JsonWriter out, Parameter<?> value) throws IOException {
+    public void write(JsonWriter out, Parameters<?> value) throws IOException {
         value.write(out);
     }
 
     /**
     * Reads one JSON value (an array, object, string, number, boolean or null) and
-    * converts it to a {@link Parameter}.
+    * converts it to a {@link Parameters}.
     *
     * @param in The {@link JsonReader} used as input
-    * @return A {@link Parameter} containing the read value
+    * @return A {@link Parameters} containing the read value
     * @throws IOException If deserialization fails
     */
     @Override
-    public Parameter<?> read(JsonReader in) throws IOException {
+    public Parameters<?> read(JsonReader in) throws IOException {
         switch (in.peek()) {
         case BEGIN_ARRAY:
-            return new ArrayParameter(Streams.parse(in).getAsJsonArray());
+            return new ArrayParameters(Streams.parse(in).getAsJsonArray());
 
         case BEGIN_OBJECT:
-            return new ObjectParameter(Streams.parse(in).getAsJsonObject());
+            return new ObjectParameters(Streams.parse(in).getAsJsonObject());
 
         default:
             throw new RuntimeException("Expected array or object, not " + in.peek());

@@ -7,19 +7,44 @@ import com.google.gson.JsonObject;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonWriter;
 
-public final class ObjectParameter implements Parameter<JsonObject> {
+/**
+ * Represents the params in object format.
+ *
+ * @author Elias*
+ * @version 0.1.0
+ * @since 0.1.0
+ * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC Specification</a>
+ */
+public final class ObjectParameters implements Parameters<JsonObject> {
 
+    /** The actual parameters */
     private final JsonObject params;
 
-    public ObjectParameter(JsonObject params) {
+    /**
+     * Creates an {@link ObjectParameters}.
+     *
+     * @param params The parameters to be used
+     */
+    public ObjectParameters(JsonObject params) {
         this.params = Objects.requireNonNull(params);
     }
 
+    /**
+     * Getter for the actual parameters.
+     *
+     * @return The actual parameters
+     */
     @Override
     public JsonObject get() {
         return params;
     }
 
+    /**
+     * Writes a {@link JsonObject} to out.
+     *
+     * @param out The {@link JsonWriter} used as output
+     * @throws IOException If serialization fails
+     */
     @Override
     public void write(JsonWriter out) throws IOException {
         Streams.write(params, out);
@@ -32,7 +57,7 @@ public final class ObjectParameter implements Parameter<JsonObject> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof ObjectParameter other)
+        if (obj != null && obj instanceof ObjectParameters other)
             return this == other || params.equals(other.params);
 
         return false;

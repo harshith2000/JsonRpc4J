@@ -4,9 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import eliasstar.jsonrpc.objects.id.Id;
-import eliasstar.jsonrpc.objects.parameter.ArrayParameter;
-import eliasstar.jsonrpc.objects.parameter.ObjectParameter;
-import eliasstar.jsonrpc.objects.parameter.Parameter;
+import eliasstar.jsonrpc.objects.parameter.ArrayParameters;
+import eliasstar.jsonrpc.objects.parameter.ObjectParameters;
+import eliasstar.jsonrpc.objects.parameter.Parameters;
 
 /**
  * Represents a JSON-RPC request without an id, otherwise known as a notification.
@@ -30,7 +30,7 @@ public final class Notification extends Request {
     * @param method The non-null method you want to invoke
     */
     public Notification(String method) {
-        super((Id<?>) null, method, (Parameter<?>) null);
+        super((Id<?>) null, method, (Parameters<?>) null);
     }
 
     /**
@@ -43,7 +43,7 @@ public final class Notification extends Request {
     * @param params The parameters provided as {@link JsonArray}
     */
     public Notification(String method, JsonArray params) {
-        super(null, method, new ArrayParameter(params));
+        super(null, method, new ArrayParameters(params));
     }
 
     /**
@@ -56,7 +56,7 @@ public final class Notification extends Request {
     * @param params The parameters provided as {@link JsonObject}
     */
     public Notification(String method, JsonObject params) {
-        super(null, method, new ObjectParameter(params));
+        super(null, method, new ObjectParameters(params));
     }
 
     /**
