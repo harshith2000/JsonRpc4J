@@ -19,9 +19,9 @@ import eliasstar.jsonrpc.objects.parameter.Parameter;
  * Represents a JSON-RPC request.
  *
  * @author Elias*
- * @version 1.0.0
- * @since 1.0.0
- * @see <a href="https://www.jsonrpc.org/specification"> JSON-RPC Specification</a>
+ * @version 0.1.0
+ * @since 0.1.0
+ * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC Specification</a>
  */
 public class Request {
 
@@ -46,11 +46,19 @@ public class Request {
     /** Specifies the parameters of this {@link Request}. */
     private final Optional<Parameter<?>> params;
 
-    @SuppressWarnings("unused") // Used indirectly by GSON
+    /** Used indirectly by GSON */
+    @SuppressWarnings("unused")
     private Request() {
         this((Id<?>) null, "", (Parameter<?>) null);
     }
 
+    /**
+     * Creates a {@link Request}.
+     *
+     * @param id If null the {@link Request} is considered to be a {@link Notification}
+     * @param method Must not be null
+     * @param params If null the {@link Request} has no params
+     */
     protected Request(Id<?> id, String method, Parameter<?> params) {
         this.jsonrpc = "2.0";
         this.id = Optional.ofNullable(id);
@@ -58,26 +66,96 @@ public class Request {
         this.params = Optional.ofNullable(params);
     }
 
+    /**
+     * Creates a {@link Request} without parameters.
+     * <p>
+     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
+     * If you want to omit the id, you should create a {@link Notification}.
+     *
+     * @param id A id of type {@link String} or {@code null}
+     * @param method The non-null method you want to invoke
+     */
     public Request(String id, String method) {
         this(id != null ? new StringId(id) : NullId.instance(), method, null);
     }
 
+    /**
+     * Creates a {@link Request} with parameters in array format.
+     * <p>
+     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
+     * If you want to omit the id you should create a {@link Notification}.
+     * <p>
+     * If params is null a NullPointerException will be thrown.
+     * If you want to create a request without parameters, you should use {@link #Request(String, String)}
+     *
+     * @param id A id of type {@link String} or {@code null}
+     * @param method The non-null method you want to invoke
+     * @param params The parameters provided as {@link JsonArray}
+     */
     public Request(String id, String method, JsonArray params) {
         this(id != null ? new StringId(id) : NullId.instance(), method, new ArrayParameter(params));
     }
 
+    /**
+     * Creates a {@link Request} with parameters in object format.
+     * <p>
+     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
+     * If you want to omit the id you should create a {@link Notification}.
+     * <p>
+     * If params is null a NullPointerException will be thrown.
+     * If you want to create a request without parameters, you should use {@link #Request(String, String)}
+     *
+     * @param id A id of type {@link String} or {@code null}
+     * @param method The non-null method you want to invoke
+     * @param params The parameters provided as {@link JsonObject}
+     */
     public Request(String id, String method, JsonObject params) {
         this(id != null ? new StringId(id) : NullId.instance(), method, new ObjectParameter(params));
     }
 
+    /**
+     * Creates a {@link Request} without parameters.
+     * <p>
+     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
+     * If you want to omit the id, you should create a {@link Notification}.
+     *
+     * @param id A id of type {@link Number} or {@code null}
+     * @param method The non-null method you want to invoke
+     */
     public Request(Number id, String method) {
         this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, null);
     }
 
+    /**
+     * Creates a {@link Request} with parameters in array format.
+     * <p>
+     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
+     * If you want to omit the id you should create a {@link Notification}.
+     * <p>
+     * If params is null a NullPointerException will be thrown.
+     * If you want to create a request without parameters, you should use {@link #Request(Number, String)}
+     *
+     * @param id A id of type {@link Number} or {@code null}
+     * @param method The non-null method you want to invoke
+     * @param params The parameters provided as {@link JsonArray}
+     */
     public Request(Number id, String method, JsonArray params) {
         this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, new ArrayParameter(params));
     }
 
+    /**
+     * Creates a {@link Request} with parameters in object format.
+     * <p>
+     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
+     * If you want to omit the id you should create a {@link Notification}.
+     * <p>
+     * If params is null a NullPointerException will be thrown.
+     * If you want to create a request without parameters, you should use {@link #Request(Number, String)}
+     *
+     * @param id A id of type {@link Number} or {@code null}
+     * @param method The non-null method you want to invoke
+     * @param params The parameters provided as {@link JsonObject}
+     */
     public Request(Number id, String method, JsonObject params) {
         this(id != null ? new NumberId(new BigDecimal(id.toString())) : NullId.instance(), method, new ObjectParameter(params));
     }
@@ -152,14 +230,12 @@ public class Request {
     }
 
     /**
-    * This method returns a {@link String} representing this {@link Request}.
-    * <p>
-    * This method returns a {@link String} equal to the value of:
+    * The returned {@link String} is equal to the value of:
     * {@code "Request@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString()}
     * where {@code contentAsJsonString()} returns a JSON-like {@link String} of this
     * {@link Request}.
     *
-    * @return
+    * @return A {@link String} representation of this {@link Request}
     */
     @Override
     public String toString() {
@@ -167,6 +243,8 @@ public class Request {
     }
 
     /**
+     * The returned {@link String} represents the contents of this {@link Request}.
+     *
      * @return A JSON-like {@link String} of this {@link Request}
      */
     protected String contentAsJsonString() {

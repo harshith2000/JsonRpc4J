@@ -22,7 +22,7 @@ import eliasstar.jsonrpc.objects.Notification;
 import eliasstar.jsonrpc.objects.Request;
 import eliasstar.jsonrpc.objects.Response;
 
-public class Connection {
+public final class Connection {
 
     private final HttpClient client;
     private final HttpRequest.Builder reqBuilder;

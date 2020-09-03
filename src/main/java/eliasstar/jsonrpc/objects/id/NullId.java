@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.google.gson.stream.JsonWriter;
 
-public class NullId implements Id<Object> {
+public final class NullId implements Id<Object> {
 
     private static NullId instance;
 

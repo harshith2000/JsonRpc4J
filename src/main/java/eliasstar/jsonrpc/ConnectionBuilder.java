@@ -11,7 +11,7 @@ import com.google.gson.GsonBuilder;
 import eliasstar.gson.OptionalTypeAdapterFactory;
 import eliasstar.jsonrpc.gson.RpcTypeAdapterFactory;
 
-public class ConnectionBuilder {
+public final class ConnectionBuilder {
 
     private String id;
     private HttpClient client;
