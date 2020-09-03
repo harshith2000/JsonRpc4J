@@ -4,18 +4,40 @@ import java.util.Optional;
 
 import com.google.gson.JsonElement;
 
+/**
+ * Represents a JSON-RPC error contained in a {@link Response}.
+ *
+ * @author Elias*
+ * @version 0.1.0
+ * @since 0.1.0
+ * @see <a href="https://www.jsonrpc.org/specification#error_object">JSON-RPC Specification</a>
+ */
 public record Error(long code, String message, Optional<JsonElement> data) {
 
-    @SuppressWarnings("unused") // Used indirectly by GSON
+    /** Used indirectly by GSON */
+    @SuppressWarnings("unused")
     private Error() {
         this(0, "", Optional.empty());
     }
 
+    /**
+    * The returned {@link String} is equal to the value of:
+    * {@code "Error@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString()}
+    * where {@code contentAsJsonString()} returns a JSON-like {@link String} of this
+    * {@link Error}.
+    *
+    * @return A {@link String} representation of this {@link Error}
+    */
     @Override
     public String toString() {
         return "Error@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString();
     }
 
+    /**
+    * The returned {@link String} represents the contents of this {@link Error}.
+    *
+    * @return A JSON-like {@link String} of this {@link Error}
+    */
     protected String contentAsJsonString() {
         StringBuilder sb = new StringBuilder();
 
