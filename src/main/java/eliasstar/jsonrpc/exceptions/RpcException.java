@@ -1,5 +1,12 @@
 package eliasstar.jsonrpc.exceptions;
 
+/**
+ * Root exception with is extended by all jsonrpc-specific exceptions.
+ *
+ * @author Elias*
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 class RpcException extends Exception {
 
     private static final long serialVersionUID = 3063415865477314837L;

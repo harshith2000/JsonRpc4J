@@ -7,6 +7,10 @@ import com.google.gson.JsonElement;
 /**
  * Represents a JSON-RPC error contained in a {@link Response}.
  *
+ * @param code Indicates the error type that occurred
+ * @param message A short description of the error
+ * @param data Additional information about the error
+ *
  * @author Elias*
  * @version 0.1.0
  * @since 0.1.0
