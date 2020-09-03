@@ -34,7 +34,7 @@ final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
 
     /**
      * Writes one JSON value (an array, object, string, number, boolean or null) for
-     * the value of {@code optional}.
+     * the value of optional.
      *
      * @param out The {@link JsonWriter} used as output
      * @param optional The {@link Optional} which is serialized

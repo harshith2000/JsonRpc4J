@@ -12,13 +12,30 @@ import eliasstar.jsonrpc.objects.id.NullId;
 import eliasstar.jsonrpc.objects.id.NumberId;
 import eliasstar.jsonrpc.objects.id.StringId;
 
+/**
+ * Gson {@link TypeAdapter} for classes implementing {@link Id}.
+ *
+ * @author Elias*
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 final class IdTypeAdapter extends TypeAdapter<Id<?>> {
 
+    /** The singleton instance. */
     private static IdTypeAdapter instance;
 
     private IdTypeAdapter() {
     }
 
+    /**
+    * Getter for singleton instance.
+    * <p>
+    * The instance is lazyly instanciated, which means the the singleton instance
+    * is created when this method is invoked for the first time. Any consecutive calls
+    * return the instance.
+    *
+    * @return The only instance of {@link IdTypeAdapter}
+    */
     static IdTypeAdapter instance() {
         if (instance == null)
             instance = new IdTypeAdapter();
@@ -26,11 +43,26 @@ final class IdTypeAdapter extends TypeAdapter<Id<?>> {
         return instance;
     }
 
+    /**
+    * Writes one JSON value (an array, object, string, number, boolean or null) for value.
+    *
+    * @param out The {@link JsonWriter} used as output
+    * @param value The {@link Id} which is serialized
+    * @throws IOException If serialization fails
+    */
     @Override
     public void write(JsonWriter out, Id<?> value) throws IOException {
         value.write(out);
     }
 
+    /**
+    * Reads one JSON value (an array, object, string, number, boolean or null) and
+    * converts it to an {@link Id}.
+    *
+    * @param in The {@link JsonReader} used as input
+    * @return An {@link Id} containing the read value
+    * @throws IOException If deserialization fails
+    */
     @Override
     public Id<?> read(JsonReader in) throws IOException {
         switch (in.peek()) {
