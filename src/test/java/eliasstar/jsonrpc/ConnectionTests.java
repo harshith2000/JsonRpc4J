@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -46,7 +47,7 @@ public final class ConnectionTests {
         var res = "{\"jsonrpc\":\"2.0\",\"id\":" + id + ",\"result\":\"test\"}";
         client.setResponse(res);
 
-        assertEquals(gson.fromJson(res, Response.class), connection.sendRequest(req));
+        assertEquals(gson.fromJson(res, Response.class), connection.sendRequest(req).get());
         assertEquals(req, gson.fromJson(client.getRequest(), Request.class));
     }
 
@@ -55,7 +56,7 @@ public final class ConnectionTests {
         var req = new Notification("test");
         client.setResponse("test");
 
-        assertEquals(null, connection.sendRequest(req));
+        assertEquals(Optional.empty(), connection.sendRequest(req));
         assertEquals(req, gson.fromJson(client.getRequest(), Notification.class));
         assertEquals(req, gson.fromJson(client.getRequest(), Request.class));
     }
@@ -163,7 +164,7 @@ public final class ConnectionTests {
 
         client.setResponse(res);
 
-        assertTrue(Arrays.equals(gson.fromJson(res, Response[].class), connection.sendBatchRequest(req)));
+        assertTrue(Arrays.equals(gson.fromJson(res, Response[].class), connection.sendBatchRequest(req).get()));
         assertTrue(Arrays.equals(req, gson.fromJson(client.getRequest(), Request[].class)));
     }
 
@@ -171,13 +172,13 @@ public final class ConnectionTests {
     public void testBatchNotificationSending() throws ConnectionException {
         client.setResponse("test");
 
-        assertEquals(null, connection.sendBatchRequest(new Notification[] {
+        assertEquals(Optional.empty(), connection.sendBatchRequest(new Notification[] {
                 new Notification("test1"),
                 new Notification("test2"),
                 new Notification("test3")
         }));
 
-        assertEquals(null, connection.sendBatchRequest(new Request[] {
+        assertEquals(Optional.empty(), connection.sendBatchRequest(new Request[] {
                 new Notification("test1"),
                 new Notification("test2"),
                 new Notification("test3")
