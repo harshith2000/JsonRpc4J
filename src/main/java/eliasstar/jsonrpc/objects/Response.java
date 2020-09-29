@@ -25,7 +25,7 @@ public record Response(String jsonrpc, Id<?> id, Optional<JsonElement> result, O
     /**
      * Whether the request that generated this {@link Response} was successful.
      *
-     * @return {@code true} if {@link #result} field is present else {@code false}
+     * @return {@code true} if {@link Response#result result} field is present else {@code false}
      */
     public boolean isSuccessful() {
         return result.isPresent();
@@ -34,7 +34,7 @@ public record Response(String jsonrpc, Id<?> id, Optional<JsonElement> result, O
     /**
     * Whether this {@link Response} contains an error.
     *
-    * @return {@code true} if {@link #error} field is present else {@code false}
+    * @return {@code true} if {@link Response#error error} field is present else {@code false}
     */
     public boolean isUnsuccessful() {
         return error.isPresent();

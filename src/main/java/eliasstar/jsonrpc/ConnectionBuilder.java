@@ -79,7 +79,7 @@ public final class ConnectionBuilder {
     }
 
     /**
-     * Sets the request builder used by a new {@link Connenction}.
+     * Sets the request builder used by a new {@link Connection}.
      * <p>
      * The builder should already contain an url. If this is not the case,
      * a url may be set afterwards using {@link #withUrl(URI)} or
@@ -94,7 +94,7 @@ public final class ConnectionBuilder {
     }
 
     /**
-     * Sets the url of a new {@link Connenction}.
+     * Sets the url of a new {@link Connection}.
      * <p>
      * If no request builder was set beforehand, a new one
      * with default settings is created.
@@ -114,7 +114,7 @@ public final class ConnectionBuilder {
     }
 
     /**
-     * Sets the url of a new {@link Connenction}.
+     * Sets the url of a new {@link Connection}.
      * <p>
      * If no request builder was set beforehand, a new one
      * with default settings is created.
@@ -160,7 +160,7 @@ public final class ConnectionBuilder {
      * Before building {@link GsonBuilder#serializeNulls()} is called.
      *
      * @return A new {@link Connection} with the settings of this {@link ConnectionBuilder}
-     * @throws IllegelStateException If neither a {@link HttpRequest.Builder} nor a {@link URI} was set
+     * @throws IllegalStateException If neither a {@link HttpRequest.Builder} nor a {@link URI} was set
      */
     public Connection build() {
         if (requestBuilder == null)
