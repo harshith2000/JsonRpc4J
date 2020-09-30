@@ -2,7 +2,7 @@
 > A general JSON-RPC 2.0 Wrapper for Java
 
 ## LICENSE
-JsonRpc4J - A general JSON-RPC 2.0 Wrapper for Java
+JsonRpc4J - A general JSON-RPC 2.0 Wrapper for Java <br>
 Copyright (C) 2020 Elias*
 
 This program is free software: you can redistribute it and/or modify
