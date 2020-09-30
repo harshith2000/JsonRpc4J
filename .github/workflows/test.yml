@@ -12,4 +12,4 @@ jobs:
         with:
           java-version: 14
 
-      - run: mvn test
+      - run: mvn test -B
