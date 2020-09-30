@@ -29,7 +29,7 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./target/json-rpc-${{ steps.tag-version.outputs.version }}.jar
-          asset_name: JsonRpc4J ${{ github.event.release.tag_name }}
+          asset_name: JsonRpc4J_${{ github.event.release.tag_name }}.jar
           asset_content_type: application/java-archive
 
       - run: mvn deploy -s ./settings.xml
