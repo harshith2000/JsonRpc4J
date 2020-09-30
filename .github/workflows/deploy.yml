@@ -4,6 +4,10 @@ on:
   release:
     types:
       - created
+        
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
 
 jobs:
   build:
@@ -20,8 +24,6 @@ jobs:
 
       - id: tag-version
         run: echo ::set-output name=version::${RELEASE_TAG_NAME:1}
-        env:
-          RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
 
       - uses: actions/upload-release-asset@v1
         with:
