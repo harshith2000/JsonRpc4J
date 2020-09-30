@@ -12,7 +12,7 @@ import eliasstar.jsonrpc.objects.parameter.Parameters;
  * Represents a JSON-RPC request without an id, otherwise known as a notification.
  *
  * @author Elias*
- * @version 0.1.0
+ * @version 1.0.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification#notification">JSON-RPC Specification</a>
  */

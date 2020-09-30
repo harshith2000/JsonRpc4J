@@ -15,7 +15,7 @@ import eliasstar.jsonrpc.objects.parameter.Parameters;
  * Gson {@link TypeAdapter} for classes implementing {@link Parameters}.
  *
  * @author Elias*
- * @version 0.1.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 final class ParameterTypeAdapter extends TypeAdapter<Parameters<?>> {

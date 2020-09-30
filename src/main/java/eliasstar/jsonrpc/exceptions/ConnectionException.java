@@ -4,7 +4,7 @@ package eliasstar.jsonrpc.exceptions;
  * Indicates a failure while sending a {@link eliasstar.jsonrpc.objects.Request Request}.
  *
  * @author Elias*
- * @version 0.1.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 public final class ConnectionException extends RpcException {

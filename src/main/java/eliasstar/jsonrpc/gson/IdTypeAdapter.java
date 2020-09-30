@@ -16,7 +16,7 @@ import eliasstar.jsonrpc.objects.id.StringId;
  * Gson {@link TypeAdapter} for classes implementing {@link Id}.
  *
  * @author Elias*
- * @version 0.1.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 final class IdTypeAdapter extends TypeAdapter<Id<?>> {

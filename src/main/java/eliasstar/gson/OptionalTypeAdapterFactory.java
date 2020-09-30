@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
  * Creates a {@link OptionalTypeAdapter} instance for each Optional parameter type.
  *
  * @author Elias*
- * @version 0.1.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 public final class OptionalTypeAdapterFactory implements TypeAdapterFactory {

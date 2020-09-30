@@ -28,7 +28,7 @@ import eliasstar.jsonrpc.objects.Response;
  * Use it to {@link #callRemoteProcedure(String) call a remote procedure} or {@link #sendNotification(String) send a} {@link Notification}.
  *
  * @author Elias*
- * @version 0.1.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 public final class Connection {

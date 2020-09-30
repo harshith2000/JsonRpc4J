@@ -12,7 +12,7 @@ import eliasstar.jsonrpc.objects.parameter.Parameters;
  * Gson {@link TypeAdapterFactory} for {@link IdTypeAdapter} and {@link ParameterTypeAdapter}.
  *
  * @author Elias*
- * @version 0.1.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 public final class RpcTypeAdapterFactory implements TypeAdapterFactory {

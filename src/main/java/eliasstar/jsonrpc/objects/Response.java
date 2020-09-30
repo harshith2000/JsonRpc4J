@@ -10,7 +10,7 @@ import eliasstar.jsonrpc.objects.id.Id;
  * Represents a JSON-RPC response.
  *
  * @author Elias*
- * @version 0.1.0
+ * @version 1.0.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification#response_object">JSON-RPC Specification</a>
  */
