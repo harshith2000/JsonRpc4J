@@ -13,7 +13,7 @@
 
   <licenses>
     <license>
-      <name>LGPL-3.0-only</name>
+      <name>LGPL-3.0-or-later</name>
       <url>https://www.gnu.org/licenses/lgpl-3.0-standalone.html</url>
       <distribution>repo</distribution>
       <comments>GNU LESSER GENERAL PUBLIC LICENSE</comments>
