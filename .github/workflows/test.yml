@@ -1,6 +1,8 @@
 name: Test code base
 
-on: [pull_request, push]
+on: 
+  - pull_request
+  - push
 
 jobs:
   test:
@@ -11,5 +13,10 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 14
+      
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
-      - run: mvn test -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+      - run: mvn test
