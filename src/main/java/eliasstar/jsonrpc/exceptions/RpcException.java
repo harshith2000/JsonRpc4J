@@ -7,7 +7,7 @@ package eliasstar.jsonrpc.exceptions;
  * @version 1.0.0
  * @since 0.1.0
  */
-class RpcException extends Exception {
+public class RpcException extends Exception {
 
     private static final long serialVersionUID = 3063415865477314837L;
 
