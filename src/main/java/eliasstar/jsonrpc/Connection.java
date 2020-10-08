@@ -31,7 +31,7 @@ import eliasstar.jsonrpc.objects.Response;
  * @version 1.0.0
  * @since 0.1.0
  */
-public final class Connection {
+public class Connection {
 
     /** The client used by this {@link Connection}. */
     private final HttpClient client;
