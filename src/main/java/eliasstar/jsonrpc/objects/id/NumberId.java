@@ -10,7 +10,7 @@ import com.google.gson.stream.JsonWriter;
  * Represents an id with a type of {@link Number} concrete {@link BigDecimal}.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification">JSON-RPC Specification</a>
  */
@@ -56,8 +56,11 @@ public final class NumberId implements Id<BigDecimal> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof NumberId other)
+        if (obj != null && obj instanceof NumberId) {
+            var other = (NumberId) obj;
+
             return this == other || id.equals(other.id);
+        }
 
         return false;
     }

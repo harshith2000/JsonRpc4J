@@ -12,7 +12,7 @@ import eliasstar.jsonrpc.objects.parameter.Parameters;
  * Represents a JSON-RPC request without an id, otherwise known as a notification.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification#notification">JSON-RPC Specification</a>
  */
@@ -69,11 +69,14 @@ public final class Notification extends Request {
     */
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof Notification other)
+        if (obj != null && obj instanceof Notification) {
+            var other = (Notification) obj;
+
             return this == other || jsonrpc().equals(other.jsonrpc())
                     && id().equals(other.id())
                     && method().equals(other.method())
                     && params().equals(other.params());
+        }
 
         return super.equals(obj);
     }

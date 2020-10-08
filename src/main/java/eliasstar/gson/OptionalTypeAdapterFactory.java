@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
  * Creates a {@link OptionalTypeAdapter} instance for each Optional parameter type.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  */
 public final class OptionalTypeAdapterFactory implements TypeAdapterFactory {
@@ -52,8 +52,11 @@ public final class OptionalTypeAdapterFactory implements TypeAdapterFactory {
     @Override
     @SuppressWarnings("unchecked") // Checks if T is not Optional and returns early
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        if (type.getRawType() == Optional.class && type.getType() instanceof ParameterizedType optionalType)
+        if (type.getRawType() == Optional.class && type.getType() instanceof ParameterizedType) {
+            var optionalType = (ParameterizedType) type.getType();
+
             return (TypeAdapter<T>) new OptionalTypeAdapter(gson, optionalType.getActualTypeArguments()[0]);
+        }
 
         return null;
     }

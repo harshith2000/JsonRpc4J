@@ -1,5 +1,6 @@
 package eliasstar.jsonrpc.objects;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.google.gson.JsonElement;
@@ -10,16 +11,38 @@ import eliasstar.jsonrpc.objects.id.Id;
  * Represents a JSON-RPC response.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification#response_object">JSON-RPC Specification</a>
  */
-public record Response(String jsonrpc, Id<?> id, Optional<JsonElement> result, Optional<Error> error) {
+public final class Response {
+
+    private final String jsonrpc = "2.0";
+    private final Id<?> id;
+    private final Optional<JsonElement> result;
+    private final Optional<Error> error;
 
     /** Used indirectly by GSON */
-    @SuppressWarnings("unused")
     private Response() {
-        this("2.0", null, Optional.empty(), Optional.empty());
+        this.id = null;
+        this.result = Optional.empty();
+        this.error = Optional.empty();
+    }
+
+    public String jsonrpc() {
+        return jsonrpc;
+    }
+
+    public Id<?> id() {
+        return id;
+    }
+
+    public Optional<JsonElement> result() {
+        return result;
+    }
+
+    public Optional<Error> error() {
+        return error;
     }
 
     /**
@@ -38,6 +61,37 @@ public record Response(String jsonrpc, Id<?> id, Optional<JsonElement> result, O
     */
     public boolean isUnsuccessful() {
         return error.isPresent();
+    }
+
+    /**
+     * This method is implemented using {@code Objects.hash()}.
+     * <p>
+     * {@inheritDoc}
+     *
+     * @return The hash code for this {@link Response}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(jsonrpc, id, result, error);
+    }
+
+    /**
+    * This method returns {@code true} if the argument is a {@link Response}
+    * and all properties are equal, otherwise returns {@code false}.
+    * <p>
+    * {@inheritDoc}
+    *
+    * @return Whether {@code this} is the same as the {@link Object} argument
+    */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof Response) {
+            var other = (Response) obj;
+
+            return this == other || jsonrpc.equals(other.jsonrpc) && id.equals(other.id) && result.equals(other.result) && error.equals(other.error);
+        }
+
+        return false;
     }
 
     /**

@@ -11,7 +11,7 @@ import com.google.gson.stream.JsonWriter;
  * Represents the params in object format.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC Specification</a>
  */
@@ -57,8 +57,11 @@ public final class ObjectParameters implements Parameters<JsonObject> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof ObjectParameters other)
+        if (obj != null && obj instanceof ObjectParameters) {
+            var other = (ObjectParameters) obj;
+
             return this == other || params.equals(other.params);
+        }
 
         return false;
     }

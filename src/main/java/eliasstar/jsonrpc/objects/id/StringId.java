@@ -9,7 +9,7 @@ import com.google.gson.stream.JsonWriter;
  * Represents an id with a type of {@link String}.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification">JSON-RPC Specification</a>
  */
@@ -55,8 +55,11 @@ public final class StringId implements Id<String> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof StringId other)
+        if (obj != null && obj instanceof StringId) {
+            var other = (StringId) obj;
+
             return this == other || id.equals(other.id);
+        }
 
         return false;
     }

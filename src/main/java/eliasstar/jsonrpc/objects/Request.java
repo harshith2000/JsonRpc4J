@@ -19,7 +19,7 @@ import eliasstar.jsonrpc.objects.parameter.Parameters;
  * Represents a JSON-RPC request.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC Specification</a>
  */
@@ -223,8 +223,11 @@ public class Request {
     */
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof Request other)
+        if (obj != null && obj instanceof Request) {
+            var other = (Request) obj;
+
             return this == other || jsonrpc.equals(other.jsonrpc) && id.equals(other.id) && method.equals(other.method) && params.equals(other.params);
+        }
 
         return false;
     }

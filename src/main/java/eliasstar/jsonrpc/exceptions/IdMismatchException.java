@@ -7,7 +7,7 @@ import eliasstar.jsonrpc.objects.id.Id;
  * does not match the one sent in the {@link eliasstar.jsonrpc.objects.Request Request}.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  */
 public final class IdMismatchException extends RpcException {

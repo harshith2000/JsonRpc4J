@@ -4,7 +4,7 @@ package eliasstar.jsonrpc.exceptions;
  * Root exception with is extended by all jsonrpc-specific exceptions.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  */
 public class RpcException extends Exception {

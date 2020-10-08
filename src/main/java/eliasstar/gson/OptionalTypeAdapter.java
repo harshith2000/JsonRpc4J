@@ -16,7 +16,7 @@ import com.google.gson.stream.JsonWriter;
  * Serializes value if present or else omits field entirely.
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  */
 final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {

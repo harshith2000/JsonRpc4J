@@ -13,7 +13,7 @@ import com.google.gson.stream.JsonWriter;
  *
  * @param <T> Type of id
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification">JSON-RPC Specification</a>
  */

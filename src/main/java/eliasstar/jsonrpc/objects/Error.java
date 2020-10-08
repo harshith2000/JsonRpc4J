@@ -1,5 +1,6 @@
 package eliasstar.jsonrpc.objects;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.google.gson.JsonElement;
@@ -12,16 +13,64 @@ import com.google.gson.JsonElement;
  * @param data Additional information about the error
  *
  * @author Elias*
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.1.0
  * @see <a href="https://www.jsonrpc.org/specification#error_object">JSON-RPC Specification</a>
  */
-public record Error(long code, String message, Optional<JsonElement> data) {
+public final class Error {
+
+    private final long code;
+    private final String message;
+    private final Optional<JsonElement> data;
 
     /** Used indirectly by GSON */
-    @SuppressWarnings("unused")
     private Error() {
-        this(0, "", Optional.empty());
+        this.code = 0;
+        this.message = "";
+        this.data = Optional.empty();
+    }
+
+    public long code() {
+        return code;
+    }
+
+    public String message() {
+        return message;
+    }
+
+    public Optional<JsonElement> data() {
+        return data;
+    }
+
+    /**
+     * This method is implemented using {@code Objects.hash()}.
+     * <p>
+     * {@inheritDoc}
+     *
+     * @return The hash code for this {@link Error}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(code, message, data);
+    }
+
+    /**
+    * This method returns {@code true} if the argument is a {@link Error}
+    * and all properties are equal, otherwise returns {@code false}.
+    * <p>
+    * {@inheritDoc}
+    *
+    * @return Whether {@code this} is the same as the {@link Object} argument
+    */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof Error) {
+            var other = (Error) obj;
+
+            return this == other || code == other.code && message.equals(other.message) && data.equals(other.data);
+        }
+
+        return false;
     }
 
     /**

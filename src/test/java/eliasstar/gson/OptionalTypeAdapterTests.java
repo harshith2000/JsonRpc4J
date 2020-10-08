@@ -66,7 +66,9 @@ public final class OptionalTypeAdapterTests {
 
         @Override
         public boolean equals(Object obj) {
-            if (obj != null && obj instanceof OptionalTestObject other) {
+            if (obj != null && obj instanceof OptionalTestObject) {
+                var other = (OptionalTestObject) obj;
+
                 if (this == other)
                     return true;
 

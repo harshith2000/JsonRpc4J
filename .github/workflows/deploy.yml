@@ -4,7 +4,7 @@ on:
   release:
     types:
       - created
-        
+
 env:
   GITHUB_TOKEN: ${{ github.token }}
   RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
@@ -17,7 +17,7 @@ jobs:
 
       - uses: actions/setup-java@v1
         with:
-          java-version: 14
+          java-version: 11
           settings-path: ${{ github.workspace }}
 
       - run: mvn package
@@ -30,6 +30,13 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./target/json-rpc-${{ steps.tag-version.outputs.version }}.jar
           asset_name: JsonRpc4J_${{ github.event.release.tag_name }}.jar
+          asset_content_type: application/java-archive
+
+      - uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./target/json-rpc-${{ steps.tag-version.outputs.version }}-jar-with-dependencies.jar
+          asset_name: JsonRpc4J_${{ github.event.release.tag_name }}-with-deps.jar
           asset_content_type: application/java-archive
 
       - run: mvn deploy -s ./settings.xml
