@@ -34,21 +34,21 @@ import eliasstar.jsonrpc.objects.Response;
 public class Connection {
 
     /** The client used by this {@link Connection}. */
-    private final HttpClient client;
+    protected final HttpClient client;
 
     /** The request builder used for new requests. */
-    private final HttpRequest.Builder reqBuilder;
+    protected final HttpRequest.Builder reqBuilder;
 
     /** The gson instance used for serialization and deserialization. */
-    private final Gson gson;
+    protected final Gson gson;
 
     /** The optional id of this {@link Connection}. */
-    private final Optional<String> id;
+    protected final Optional<String> id;
 
     /** The next request id. */
-    private int requestId;
+    protected int requestId;
 
-    Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, Gson gson) {
+    protected Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, Gson gson) {
         this.id = Optional.ofNullable(id);
         this.client = Objects.requireNonNull(client);
         this.reqBuilder = Objects.requireNonNull(reqBuilder);
@@ -213,7 +213,7 @@ public class Connection {
      * @throws ErrorResponseException If instead of a result a error was received
      * @throws IdMismatchException If the ids do not match
      */
-    private JsonElement checkResponse(Request req, Response res) throws ErrorResponseException, IdMismatchException {
+    protected JsonElement checkResponse(Request req, Response res) throws ErrorResponseException, IdMismatchException {
         if (res.isUnsuccessful())
             throw new ErrorResponseException(res.error().get());
 
