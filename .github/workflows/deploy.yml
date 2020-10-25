@@ -14,16 +14,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          path: release
 
       - uses: actions/setup-java@v1
         with:
           java-version: 11
           settings-path: ${{ github.workspace }}
 
-      - name: Deploy to package registry
-        run: mvn deploy -s ./settings.xml
+      - run: cd release
 
-      - name: Deploy javadocs to gh-pages
+      - name: Deploy to package registry
+        run: mvn deploy -s ${{ github.workspace }}/settings.xml
 
       - run: mvn assembly:single
 
@@ -31,4 +33,16 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./target/*.jar
+          asset_path: target/*.jar
+
+      - run: cd ${{ github.workspace }}
+
+      - uses: actions/checkout@v2
+        with:
+          ref: docs
+          path: docs
+
+      - run: mv release/target/apidocs/* docs/*
+
+      - name: Deploy javadocs to gh-pages
+        run: git push
