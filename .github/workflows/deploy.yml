@@ -24,8 +24,8 @@ jobs:
       - name: Deploy to package registry
         run: |
           cd release
-          git config user.name "$(git log --format='%an' HEAD^!)"
-          git config user.email "$(git log --format='%ae' HEAD^!)"
+          git config --global user.name "$(git log --format='%an' HEAD^!)"
+          git config --global user.email "$(git log --format='%ae' HEAD^!)"
           mvn -B deploy -s ${{ github.workspace }}/settings.xml
           mvn -B assembly:single
 
