@@ -48,6 +48,14 @@ public class Connection {
     /** The next request id. */
     protected int requestId;
 
+    /**
+     * Used by {@link ConnectionBuilder}.
+     *
+     * @param id The id prefix used for requests
+     * @param client The client used for requests
+     * @param reqBuilder The request builder used for new requests
+     * @param gson The gson instance used for serialization and deserialization.
+     */
     protected Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, Gson gson) {
         this.id = Optional.ofNullable(id);
         this.client = Objects.requireNonNull(client);

@@ -16,7 +16,7 @@ import com.google.gson.stream.JsonWriter;
  */
 public final class NumberId implements Id<BigDecimal> {
 
-    /** The actual id */
+    /** The actual id. */
     private final BigDecimal id;
 
     /**
