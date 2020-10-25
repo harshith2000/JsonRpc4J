@@ -5,10 +5,6 @@ on:
     types:
       - created
 
-env:
-  GITHUB_TOKEN: ${{ github.token }}
-  RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,7 +38,13 @@ jobs:
           ref: docs
           path: docs
 
-      - run: mv release/target/apidocs/* docs/*
-
-      - name: Deploy javadocs to gh-pages
-        run: git push
+      - name: Deploy gh-pages
+        run: |
+          mv -f docs/.git .
+          rm -rf docs/*
+          mv .git docs
+          mv -f release/target/apidocs/* docs
+          cd docs
+          git add
+          git commit -m "Release ${{ github.event.release.tag_name }}"
+          git push
