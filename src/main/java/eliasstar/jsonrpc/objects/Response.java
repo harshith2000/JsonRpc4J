@@ -17,30 +17,69 @@ import eliasstar.jsonrpc.objects.id.Id;
  */
 public final class Response {
 
+    /**
+    * Specifies the version of the JSON-RPC protocol.
+    * <p>
+    * It is always {@code "2.0"}.
+    */
     private final String jsonrpc = "2.0";
+
+    /** Specifies the id of this {@link Response}. */
     private final Id<?> id;
+
+    /** Specifies the possible result of this {@link Response}. */
     private final Optional<JsonElement> result;
+
+    /** Specifies the possible error of this {@link Response}. */
     private final Optional<Error> error;
 
-    /** Used indirectly by GSON */
+    /** Used indirectly by GSON. */
     private Response() {
         this.id = null;
         this.result = Optional.empty();
         this.error = Optional.empty();
     }
 
+    /**
+    * Getter for jsonrpc field.
+    * <p>
+    * It is always {@code "2.0"}.
+    *
+    * @return The version of the JSON-RPC protocol
+    */
     public String jsonrpc() {
         return jsonrpc;
     }
 
+    /**
+    * Getter for id field.
+    *
+    * @return The id of this {@link Response}
+    */
     public Id<?> id() {
         return id;
     }
 
+    /**
+    * Getter for result field.
+    * <p>
+    * If the {@code Optional} is empty the {@link Response} is considered to be an
+    * error response.
+    *
+    * @return The result of this {@link Response}
+    */
     public Optional<JsonElement> result() {
         return result;
     }
 
+    /**
+    * Getter for error field.
+    * <p>
+    * If the {@code Optional} is not empty the {@link Response} is considered to be an
+    * error response.
+    *
+    * @return The error of this {@link Response}
+    */
     public Optional<Error> error() {
         return error;
     }

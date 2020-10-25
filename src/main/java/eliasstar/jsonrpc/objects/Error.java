@@ -8,10 +8,6 @@ import com.google.gson.JsonElement;
 /**
  * Represents a JSON-RPC error contained in a {@link Response}.
  *
- * @param code Indicates the error type that occurred
- * @param message A short description of the error
- * @param data Additional information about the error
- *
  * @author Elias*
  * @version 1.2.0
  * @since 0.1.0
@@ -19,25 +15,45 @@ import com.google.gson.JsonElement;
  */
 public final class Error {
 
+    /** Indicates the error type that occurred. */
     private final long code;
+
+    /** A short description of the error. */
     private final String message;
+
+    /** Additional information about the error. */
     private final Optional<JsonElement> data;
 
-    /** Used indirectly by GSON */
+    /** Used indirectly by GSON. */
     private Error() {
         this.code = 0;
         this.message = "";
         this.data = Optional.empty();
     }
 
+    /**
+    * Getter for error code field.
+    *
+    * @return The error code
+    */
     public long code() {
         return code;
     }
 
+    /**
+    * Getter for error message field.
+    *
+    * @return The message
+    */
     public String message() {
         return message;
     }
 
+    /**
+    * Getter for error data field.
+    *
+    * @return The additional data
+    */
     public Optional<JsonElement> data() {
         return data;
     }
