@@ -24,6 +24,8 @@ jobs:
       - name: Deploy to package registry
         run: |
           cd release
+          git config user.name "$(git log --format='%an' HEAD^!)"
+          git config user.email "$(git log --format='%ae' HEAD^!)"
           mvn -B deploy -s ${{ github.workspace }}/settings.xml
           mvn -B assembly:single
 
@@ -45,6 +47,6 @@ jobs:
           mv .git docs
           mv -f release/target/apidocs/* docs
           cd docs
-          git add
+          git add .
           git commit -m "Release ${{ github.event.release.tag_name }}"
           git push
