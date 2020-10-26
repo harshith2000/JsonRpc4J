@@ -83,7 +83,7 @@ var results = con.sendBatchRequest(
 ```
 
 
-## LICENSE
+## License
 JsonRpc4J - A general JSON-RPC 2.0 Wrapper for Java <br>
 Copyright (C) 2020 Elias*
 
