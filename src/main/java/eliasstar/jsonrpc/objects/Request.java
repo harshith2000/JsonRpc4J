@@ -19,9 +19,9 @@ import eliasstar.jsonrpc.objects.parameter.Parameters;
  * Represents a JSON-RPC request.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
- * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC Specification</a>
+ * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC
+ *      Specification</a>
  */
 public class Request {
 
@@ -33,10 +33,8 @@ public class Request {
     private final String jsonrpc;
 
     /**
-     * Specifies the id of this {@link Request}.
-     *
-     * If the {@code Optional} is empty the {@link Request} is considered to be a
-     * {@link Notification}.
+     * Specifies the id of this {@link Request}. If the {@code Optional} is empty
+     * the {@link Request} is considered to be a {@link Notification}.
      */
     private final Optional<Id<?>> id;
 
@@ -55,7 +53,8 @@ public class Request {
     /**
      * Creates a {@link Request}.
      *
-     * @param id If null the {@link Request} is considered to be a {@link Notification}
+     * @param id     If null the {@link Request} is considered to be a
+     *               {@link Notification}
      * @param method Must not be null
      * @param params If null the {@link Request} has no params
      */
@@ -69,10 +68,11 @@ public class Request {
     /**
      * Creates a {@link Request} without parameters.
      * <p>
-     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
-     * If you want to omit the id, you should create a {@link Notification}.
+     * If id is {@code null} the request id will be serialized as the JSON
+     * {@code null} value. If you want to omit the id, you should create a
+     * {@link Notification}.
      *
-     * @param id A id of type {@link String} or {@code null}
+     * @param id     A id of type {@link String} or {@code null}
      * @param method The non-null method you want to invoke
      */
     public Request(String id, String method) {
@@ -82,13 +82,15 @@ public class Request {
     /**
      * Creates a {@link Request} with parameters in array format.
      * <p>
-     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
-     * If you want to omit the id you should create a {@link Notification}.
+     * If id is {@code null} the request id will be serialized as the JSON
+     * {@code null} value. If you want to omit the id you should create a
+     * {@link Notification}.
      * <p>
-     * If params is null a NullPointerException will be thrown.
-     * If you want to create a request without parameters, you should use {@link #Request(String, String)}
+     * If params is null a NullPointerException will be thrown. If you want to
+     * create a request without parameters, you should use
+     * {@link #Request(String, String)}
      *
-     * @param id A id of type {@link String} or {@code null}
+     * @param id     A id of type {@link String} or {@code null}
      * @param method The non-null method you want to invoke
      * @param params The parameters provided as {@link JsonArray}
      */
@@ -99,13 +101,15 @@ public class Request {
     /**
      * Creates a {@link Request} with parameters in object format.
      * <p>
-     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
-     * If you want to omit the id you should create a {@link Notification}.
+     * If id is {@code null} the request id will be serialized as the JSON
+     * {@code null} value. If you want to omit the id you should create a
+     * {@link Notification}.
      * <p>
-     * If params is null a NullPointerException will be thrown.
-     * If you want to create a request without parameters, you should use {@link #Request(String, String)}
+     * If params is null a NullPointerException will be thrown. If you want to
+     * create a request without parameters, you should use
+     * {@link #Request(String, String)}
      *
-     * @param id A id of type {@link String} or {@code null}
+     * @param id     A id of type {@link String} or {@code null}
      * @param method The non-null method you want to invoke
      * @param params The parameters provided as {@link JsonObject}
      */
@@ -116,10 +120,11 @@ public class Request {
     /**
      * Creates a {@link Request} without parameters.
      * <p>
-     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
-     * If you want to omit the id, you should create a {@link Notification}.
+     * If id is {@code null} the request id will be serialized as the JSON
+     * {@code null} value. If you want to omit the id, you should create a
+     * {@link Notification}.
      *
-     * @param id A id of type {@link Number} or {@code null}
+     * @param id     A id of type {@link Number} or {@code null}
      * @param method The non-null method you want to invoke
      */
     public Request(Number id, String method) {
@@ -129,13 +134,15 @@ public class Request {
     /**
      * Creates a {@link Request} with parameters in array format.
      * <p>
-     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
-     * If you want to omit the id you should create a {@link Notification}.
+     * If id is {@code null} the request id will be serialized as the JSON
+     * {@code null} value. If you want to omit the id you should create a
+     * {@link Notification}.
      * <p>
-     * If params is null a NullPointerException will be thrown.
-     * If you want to create a request without parameters, you should use {@link #Request(Number, String)}
+     * If params is null a NullPointerException will be thrown. If you want to
+     * create a request without parameters, you should use
+     * {@link #Request(Number, String)}
      *
-     * @param id A id of type {@link Number} or {@code null}
+     * @param id     A id of type {@link Number} or {@code null}
      * @param method The non-null method you want to invoke
      * @param params The parameters provided as {@link JsonArray}
      */
@@ -146,13 +153,15 @@ public class Request {
     /**
      * Creates a {@link Request} with parameters in object format.
      * <p>
-     * If id is {@code null} the request id will be serialized as the JSON {@code null} value.
-     * If you want to omit the id you should create a {@link Notification}.
+     * If id is {@code null} the request id will be serialized as the JSON
+     * {@code null} value. If you want to omit the id you should create a
+     * {@link Notification}.
      * <p>
-     * If params is null a NullPointerException will be thrown.
-     * If you want to create a request without parameters, you should use {@link #Request(Number, String)}
+     * If params is null a NullPointerException will be thrown. If you want to
+     * create a request without parameters, you should use
+     * {@link #Request(Number, String)}
      *
-     * @param id A id of type {@link Number} or {@code null}
+     * @param id     A id of type {@link Number} or {@code null}
      * @param method The non-null method you want to invoke
      * @param params The parameters provided as {@link JsonObject}
      */
@@ -172,31 +181,31 @@ public class Request {
     }
 
     /**
-    * Getter for id field.
-    * <p>
-    * If the {@code Optional} is empty the {@link Request} is considered to be a
-    * {@link Notification}.
-    *
-    * @return The id of this {@link Request}
-    */
+     * Getter for id field.
+     * <p>
+     * If the {@code Optional} is empty the {@link Request} is considered to be a
+     * {@link Notification}.
+     *
+     * @return The id of this {@link Request}
+     */
     public Optional<Id<?>> id() {
         return id;
     }
 
     /**
-    * Getter for method field.
-    *
-    * @return The name of the method to be invoked
-    */
+     * Getter for method field.
+     *
+     * @return The name of the method to be invoked
+     */
     public String method() {
         return method;
     }
 
     /**
-    * Getter for params field.
-    *
-    * @return The parameters of this {@link Request}
-    */
+     * Getter for params field.
+     *
+     * @return The parameters of this {@link Request}
+     */
     public Optional<Parameters<?>> params() {
         return params;
     }
@@ -214,13 +223,14 @@ public class Request {
     }
 
     /**
-    * This method returns {@code true} if the argument is a {@link Request}
-    * and all properties are equal, otherwise returns {@code false}.
-    * <p>
-    * {@inheritDoc}
-    *
-    * @return Whether {@code this} is the same as the {@link Object} argument
-    */
+     * This method returns {@code true} if the argument is a {@link Request} and all
+     * properties are equal, otherwise returns {@code false}.
+     * <p>
+     * {@inheritDoc}
+     *
+     * @param obj The object to be checked
+     * @return Whether {@code this} is the same as the {@link Object} argument
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Request) {
@@ -233,13 +243,13 @@ public class Request {
     }
 
     /**
-    * The returned {@link String} is equal to the value of:
-    * {@code "Request@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString()}
-    * where {@code contentAsJsonString()} returns a JSON-like {@link String} of this
-    * {@link Request}.
-    *
-    * @return A {@link String} representation of this {@link Request}
-    */
+     * The returned {@link String} is equal to the value of:
+     * {@code "Request@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString()}
+     * where {@code contentAsJsonString()} returns a JSON-like {@link String} of
+     * this {@link Request}.
+     *
+     * @return A {@link String} representation of this {@link Request}
+     */
     @Override
     public String toString() {
         return "Request@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString();

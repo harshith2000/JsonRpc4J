@@ -9,10 +9,10 @@ import java.time.Duration;
 import com.google.gson.Gson;
 
 /**
- * This facade can be used to get startes quickly and easily with sending RPC requests.
+ * This facade can be used to get startes quickly and easily with sending RPC
+ * requests.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
  */
 public final class JsonRpc {
@@ -48,7 +48,7 @@ public final class JsonRpc {
      * <p>
      * Creates a {@link Connection} with default settings.
      *
-     * @param url The url of the RPC service
+     * @param url            The url of the RPC service
      * @param requestTimeout The {@link Duration} until a request will timeout
      * @return A {@link Connection} object for sending requests
      */

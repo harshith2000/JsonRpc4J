@@ -7,14 +7,15 @@ import com.google.gson.JsonElement;
 import eliasstar.jsonrpc.objects.Error;
 
 /**
- * Indicates that a {@link eliasstar.jsonrpc.objects.Response Response} with an {@link Error} was received.
+ * Indicates that a {@link eliasstar.jsonrpc.objects.Response Response} with an
+ * {@link Error} was received.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
  */
 public final class ErrorResponseException extends RpcException {
 
+    /** Used for serialization. */
     private static final long serialVersionUID = 6883031150212639037L;
 
     /** Indicates the error type that occurred. */
@@ -35,7 +36,7 @@ public final class ErrorResponseException extends RpcException {
     /**
      * Creates a {@link ErrorResponseException} without additional data.
      *
-     * @param code The error type that occurred
+     * @param code    The error type that occurred
      * @param message A short description of the error
      */
     public ErrorResponseException(long code, String message) {
@@ -45,9 +46,9 @@ public final class ErrorResponseException extends RpcException {
     /**
      * Creates a {@link ErrorResponseException} with additional data.
      *
-     * @param code The error type that occurred
+     * @param code    The error type that occurred
      * @param message A short description of the error
-     * @param data Additional information about the error
+     * @param data    Additional information about the error
      */
     public ErrorResponseException(long code, String message, JsonElement data) {
         super(message);

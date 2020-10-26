@@ -3,15 +3,16 @@ package eliasstar.jsonrpc.exceptions;
 import eliasstar.jsonrpc.objects.id.Id;
 
 /**
- * Indicates that the {@link Id} of the {@link eliasstar.jsonrpc.objects.Response Response} received
- * does not match the one sent in the {@link eliasstar.jsonrpc.objects.Request Request}.
+ * Indicates that the {@link Id} of the
+ * {@link eliasstar.jsonrpc.objects.Response Response} received does not match
+ * the one sent in the {@link eliasstar.jsonrpc.objects.Request Request}.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
  */
 public final class IdMismatchException extends RpcException {
 
+    /** Used for serialization. */
     private static final long serialVersionUID = 8202555481659349004L;
 
     /** {@link Id} of the {@link eliasstar.jsonrpc.objects.Request Request} */
@@ -23,8 +24,10 @@ public final class IdMismatchException extends RpcException {
     /**
      * Creates a {@link IdMismatchException}.
      *
-     * @param reqId {@link Id} of the {@link eliasstar.jsonrpc.objects.Request Request}
-     * @param resId {@link Id} of the {@link eliasstar.jsonrpc.objects.Response Response}
+     * @param reqId {@link Id} of the {@link eliasstar.jsonrpc.objects.Request
+     *              Request}
+     * @param resId {@link Id} of the {@link eliasstar.jsonrpc.objects.Response
+     *              Response}
      */
     public IdMismatchException(Id<?> reqId, Id<?> resId) {
         super(String.format("Request id (%s) does not match response id (%s)", reqId, resId));

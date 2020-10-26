@@ -9,9 +9,9 @@ import com.google.gson.JsonElement;
  * Represents a JSON-RPC error contained in a {@link Response}.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
- * @see <a href="https://www.jsonrpc.org/specification#error_object">JSON-RPC Specification</a>
+ * @see <a href="https://www.jsonrpc.org/specification#error_object">JSON-RPC
+ *      Specification</a>
  */
 public final class Error {
 
@@ -32,28 +32,28 @@ public final class Error {
     }
 
     /**
-    * Getter for error code field.
-    *
-    * @return The error code
-    */
+     * Getter for error code field.
+     *
+     * @return The error code
+     */
     public long code() {
         return code;
     }
 
     /**
-    * Getter for error message field.
-    *
-    * @return The message
-    */
+     * Getter for error message field.
+     *
+     * @return The message
+     */
     public String message() {
         return message;
     }
 
     /**
-    * Getter for error data field.
-    *
-    * @return The additional data
-    */
+     * Getter for error data field.
+     *
+     * @return The additional data
+     */
     public Optional<JsonElement> data() {
         return data;
     }
@@ -71,13 +71,14 @@ public final class Error {
     }
 
     /**
-    * This method returns {@code true} if the argument is a {@link Error}
-    * and all properties are equal, otherwise returns {@code false}.
-    * <p>
-    * {@inheritDoc}
-    *
-    * @return Whether {@code this} is the same as the {@link Object} argument
-    */
+     * This method returns {@code true} if the argument is a {@link Error} and all
+     * properties are equal, otherwise returns {@code false}.
+     * <p>
+     * {@inheritDoc}
+     *
+     * @param obj The object to be checked
+     * @return Whether {@code this} is the same as the {@link Object} argument
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Error) {
@@ -90,23 +91,23 @@ public final class Error {
     }
 
     /**
-    * The returned {@link String} is equal to the value of:
-    * {@code "Error@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString()}
-    * where {@code contentAsJsonString()} returns a JSON-like {@link String} of this
-    * {@link Error}.
-    *
-    * @return A {@link String} representation of this {@link Error}
-    */
+     * The returned {@link String} is equal to the value of:
+     * {@code "Error@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString()}
+     * where {@code contentAsJsonString()} returns a JSON-like {@link String} of
+     * this {@link Error}.
+     *
+     * @return A {@link String} representation of this {@link Error}
+     */
     @Override
     public String toString() {
         return "Error@" + Integer.toHexString(hashCode()) + " " + contentAsJsonString();
     }
 
     /**
-    * The returned {@link String} represents the contents of this {@link Error}.
-    *
-    * @return A JSON-like {@link String} of this {@link Error}
-    */
+     * The returned {@link String} represents the contents of this {@link Error}.
+     *
+     * @return A JSON-like {@link String} of this {@link Error}
+     */
     protected String contentAsJsonString() {
         StringBuilder sb = new StringBuilder();
 

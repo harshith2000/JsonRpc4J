@@ -11,10 +11,10 @@ import com.google.gson.reflect.TypeToken;
 /**
  * Gson {@link TypeAdapterFactory} for {@link OptionalTypeAdapter}.
  * <p>
- * Creates a {@link OptionalTypeAdapter} instance for each Optional parameter type.
+ * Creates a {@link OptionalTypeAdapter} instance for each Optional parameter
+ * type.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
  */
 public final class OptionalTypeAdapterFactory implements TypeAdapterFactory {
@@ -22,6 +22,7 @@ public final class OptionalTypeAdapterFactory implements TypeAdapterFactory {
     /** The singleton instance. */
     private static OptionalTypeAdapterFactory instance;
 
+    /** Used once for singleton. */
     private OptionalTypeAdapterFactory() {
     }
 
@@ -29,8 +30,8 @@ public final class OptionalTypeAdapterFactory implements TypeAdapterFactory {
      * Getter for singleton instance.
      * <p>
      * The instance is lazyly instanciated, which means the the singleton instance
-     * is created when this method is invoked for the first time. Any consecutive calls
-     * return the instance.
+     * is created when this method is invoked for the first time. Any consecutive
+     * calls return the instance.
      *
      * @return The only instance of {@link OptionalTypeAdapterFactory}
      */
@@ -42,12 +43,15 @@ public final class OptionalTypeAdapterFactory implements TypeAdapterFactory {
     }
 
     /**
-     * Creates a {@link OptionalTypeAdapter}, or null if {@code type} is not representing a {@link Optional}.
+     * Creates a {@link OptionalTypeAdapter}, or null if {@code type} is not
+     * representing a {@link Optional}.
      *
-     * @param <T> The type for which a {@link TypeAdapter} is needed
+     * @param <T>  The type for which a {@link TypeAdapter} is needed
      * @param gson The {@link Gson} instance to which this adapter is registered
-     * @param type A {@link TypeToken} which specifies the type the {@link TypeAdapter} should handle
-     * @return A {@link TypeAdapter} which is either a {@link OptionalTypeAdapter} or null
+     * @param type A {@link TypeToken} which specifies the type the
+     *             {@link TypeAdapter} should handle
+     * @return A {@link TypeAdapter} which is either a {@link OptionalTypeAdapter}
+     *         or null
      */
     @Override
     @SuppressWarnings("unchecked") // Checks if T is not Optional and returns early

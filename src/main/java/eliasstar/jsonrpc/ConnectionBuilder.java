@@ -14,10 +14,10 @@ import eliasstar.jsonrpc.gson.RpcTypeAdapterFactory;
 /**
  * Use this Builder to construct a customized {@link Connection} instance.
  * <p>
- * To get a {@link Connection} with default settings, you can use {@link JsonRpc#connect(String)}.
+ * To get a {@link Connection} with default settings, you can use
+ * {@link JsonRpc#connect(String)}.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
  */
 public final class ConnectionBuilder {
@@ -31,7 +31,10 @@ public final class ConnectionBuilder {
     /** The request builder containing the uri. */
     private HttpRequest.Builder requestBuilder;
 
-    /** The gson builder used for creating the gson instance used by a new {@link Connection}. */
+    /**
+     * The gson builder used for creating the gson instance used by a new
+     * {@link Connection}.
+     */
     private GsonBuilder gsonBuilder;
 
     /**
@@ -44,10 +47,11 @@ public final class ConnectionBuilder {
     }
 
     /**
-     * Creates a {@link ConnectionBuilder} with the specified {@link HttpClient} and url.
+     * Creates a {@link ConnectionBuilder} with the specified {@link HttpClient} and
+     * url.
      *
      * @param client The client used a new {@link Connection}
-     * @param url The url used to create a {@link HttpRequest.Builder}
+     * @param url    The url used to create a {@link HttpRequest.Builder}
      */
     public ConnectionBuilder(HttpClient client, String url) {
         this.client = Objects.requireNonNull(client);
@@ -81,11 +85,10 @@ public final class ConnectionBuilder {
     /**
      * Sets the request builder used by a new {@link Connection}.
      * <p>
-     * The builder should already contain an url. If this is not the case,
-     * a url may be set afterwards using {@link #withUrl(URI)} or
-     * {@link #withUrl(String)}.
+     * The builder should already contain an url. If this is not the case, a url may
+     * be set afterwards using {@link #withUrl(URI)} or {@link #withUrl(String)}.
      *
-     * @param reqBuilder The  {@link HttpRequest.Builder}
+     * @param reqBuilder The {@link HttpRequest.Builder}
      * @return {@code this} to satisfy the builder pattern
      */
     public ConnectionBuilder setRequestBuilder(HttpRequest.Builder reqBuilder) {
@@ -96,8 +99,8 @@ public final class ConnectionBuilder {
     /**
      * Sets the url of a new {@link Connection}.
      * <p>
-     * If no request builder was set beforehand, a new one
-     * with default settings is created.
+     * If no request builder was set beforehand, a new one with default settings is
+     * created.
      *
      * @param url The service url
      * @return {@code this} to satisfy the builder pattern
@@ -116,8 +119,8 @@ public final class ConnectionBuilder {
     /**
      * Sets the url of a new {@link Connection}.
      * <p>
-     * If no request builder was set beforehand, a new one
-     * with default settings is created.
+     * If no request builder was set beforehand, a new one with default settings is
+     * created.
      *
      * @param url The service url
      * @return {@code this} to satisfy the builder pattern
@@ -129,7 +132,8 @@ public final class ConnectionBuilder {
     /**
      * Sets the {@link GsonBuilder} to be used by a created {@link Connection}.
      * <p>
-     * Creates a new {@link GsonBuilder} with the same settings as the {@link Gson} instance.
+     * Creates a new {@link GsonBuilder} with the same settings as the {@link Gson}
+     * instance.
      *
      * @param gson The {@link Gson} from which a {@link GsonBuilder} is created
      * @return {@code this} to satisfy the builder pattern
@@ -140,9 +144,11 @@ public final class ConnectionBuilder {
     }
 
     /**
-     * Sets the gson builder used for creating the gson instance used by a new {@link Connection}.
+     * Sets the gson builder used for creating the gson instance used by a new
+     * {@link Connection}.
      *
-     * @param gson The {@link GsonBuilder} to be used for a created {@link Connection}
+     * @param gson The {@link GsonBuilder} to be used for a created
+     *             {@link Connection}
      * @return {@code this} to satisfy the builder pattern
      */
     public ConnectionBuilder setGson(GsonBuilder gson) {
@@ -152,15 +158,20 @@ public final class ConnectionBuilder {
     /**
      * Creates a {@link Connection}.
      * <p>
-     * If no {@link Gson} or {@link GsonBuilder} was set, a new one is created with default settings.
+     * If no {@link Gson} or {@link GsonBuilder} was set, a new one is created with
+     * default settings.
      * <p>
-     * The {@code "Content-Type"} header is set to {@code "application/json"} on the {@link HttpRequest.Builder}.
+     * The {@code "Content-Type"} header is set to {@code "application/json"} on the
+     * {@link HttpRequest.Builder}.
      * <p>
-     * {@link OptionalTypeAdapterFactory} and {@link RpcTypeAdapterFactory} are registered to the {@link GsonBuilder} instance.
-     * Before building {@link GsonBuilder#serializeNulls()} is called.
+     * {@link OptionalTypeAdapterFactory} and {@link RpcTypeAdapterFactory} are
+     * registered to the {@link GsonBuilder} instance. Before building
+     * {@link GsonBuilder#serializeNulls()} is called.
      *
-     * @return A new {@link Connection} with the settings of this {@link ConnectionBuilder}
-     * @throws IllegalStateException If neither a {@link HttpRequest.Builder} nor a {@link URI} was set
+     * @return A new {@link Connection} with the settings of this
+     *         {@link ConnectionBuilder}
+     * @throws IllegalStateException If neither a {@link HttpRequest.Builder} nor a
+     *                               {@link URI} was set
      */
     public Connection build() {
         if (requestBuilder == null)

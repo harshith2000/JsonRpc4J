@@ -13,9 +13,9 @@ import com.google.gson.stream.JsonWriter;
  *
  * @param <T> Type of parameter
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
- * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC Specification</a>
+ * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC
+ *      Specification</a>
  */
 public interface Parameters<T> extends Supplier<T> {
 

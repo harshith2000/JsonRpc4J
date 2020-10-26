@@ -16,7 +16,6 @@ import com.google.gson.stream.JsonWriter;
  * Serializes value if present or else omits field entirely.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
  */
 final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
@@ -27,6 +26,12 @@ final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
     /** The {@link Type} of the optionals value. */
     private final Type typeOfOptional;
 
+    /**
+     * Used by {@link OptionalTypeAdapterFactory}.
+     *
+     * @param gson           The current gson instance
+     * @param typeOfOptional The type parameter of the {@link Optional}
+     */
     OptionalTypeAdapter(Gson gson, Type typeOfOptional) {
         this.gson = gson;
         this.typeOfOptional = typeOfOptional;
@@ -36,7 +41,7 @@ final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
      * Writes one JSON value (an array, object, string, number, boolean or null) for
      * the value of optional.
      *
-     * @param out The {@link JsonWriter} used as output
+     * @param out      The {@link JsonWriter} used as output
      * @param optional The {@link Optional} which is serialized
      * @throws IOException If serialization fails
      */

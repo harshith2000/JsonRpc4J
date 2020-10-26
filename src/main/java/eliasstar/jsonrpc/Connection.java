@@ -25,10 +25,10 @@ import eliasstar.jsonrpc.objects.Response;
 /**
  * This class is the primary way of interacting with a JSON-RPC service.
  * <p>
- * Use it to {@link #callRemoteProcedure(String) call a remote procedure} or {@link #sendNotification(String) send a} {@link Notification}.
+ * Use it to {@link #callRemoteProcedure(String) call a remote procedure} or
+ * {@link #sendNotification(String) send a} {@link Notification}.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
  */
 public class Connection {
@@ -51,10 +51,11 @@ public class Connection {
     /**
      * Used by {@link ConnectionBuilder}.
      *
-     * @param id The id prefix used for requests
-     * @param client The client used for requests
+     * @param id         The id prefix used for requests
+     * @param client     The client used for requests
      * @param reqBuilder The request builder used for new requests
-     * @param gson The gson instance used for serialization and deserialization.
+     * @param gson       The gson instance used for serialization and
+     *                   deserialization.
      */
     protected Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, Gson gson) {
         this.id = Optional.ofNullable(id);
@@ -66,8 +67,8 @@ public class Connection {
     /**
      * Sends a {@link Request} object to the server.
      * <p>
-     * If the request is a {@link Notification}
-     * the returned {@link Optional} will be empty.
+     * If the request is a {@link Notification} the returned {@link Optional} will
+     * be empty.
      *
      * @param req The {@link Request} or {@link Notification}
      * @return A optional {@link Response}
@@ -91,9 +92,11 @@ public class Connection {
      *
      * @param method The method to invoke
      * @return The result of the operation
-     * @throws ConnectionException If sending fails
-     * @throws ErrorResponseException If a {@link Response} with an {@link Error} is received
-     * @throws IdMismatchException If the {@link Response} does not have the same id as the {@link Request}.
+     * @throws ConnectionException    If sending fails
+     * @throws ErrorResponseException If a {@link Response} with an {@link Error} is
+     *                                received
+     * @throws IdMismatchException    If the {@link Response} does not have the same
+     *                                id as the {@link Request}.
      */
     public JsonElement callRemoteProcedure(String method) throws ConnectionException, ErrorResponseException, IdMismatchException {
         var req = id.map(i -> new Request(i + "-" + requestId++, method)).orElse(new Request(requestId++, method));
@@ -103,15 +106,17 @@ public class Connection {
     /**
      * Calls a remote procedure.
      * <p>
-     * Sends a {@link Request} with the specified method and params
-     * and checks the response.
+     * Sends a {@link Request} with the specified method and params and checks the
+     * response.
      *
      * @param method The method to invoke
      * @param params The parameters of the method
      * @return The result of the operation
-     * @throws ConnectionException If sending fails
-     * @throws ErrorResponseException If a {@link Response} with an {@link Error} is received
-     * @throws IdMismatchException If the {@link Response} does not have the same id as the {@link Request}.
+     * @throws ConnectionException    If sending fails
+     * @throws ErrorResponseException If a {@link Response} with an {@link Error} is
+     *                                received
+     * @throws IdMismatchException    If the {@link Response} does not have the same
+     *                                id as the {@link Request}.
      */
     public JsonElement callRemoteProcedure(String method, JsonArray params) throws ConnectionException, ErrorResponseException, IdMismatchException {
         var req = id.map(i -> new Request(i + "-" + requestId++, method, params)).orElse(new Request(requestId++, method, params));
@@ -119,51 +124,53 @@ public class Connection {
     }
 
     /**
-    * Calls a remote procedure.
-    * <p>
-    * Sends a {@link Request} with the specified method and params
-    * and checks the response.
-    *
-    * @param method The method to invoke
-    * @param params The parameters of the method
-    * @return The result of the operation
-    * @throws ConnectionException If sending fails
-    * @throws ErrorResponseException If a {@link Response} with an {@link Error} is received
-    * @throws IdMismatchException If the {@link Response} does not have the same id as the {@link Request}.
-    */
+     * Calls a remote procedure.
+     * <p>
+     * Sends a {@link Request} with the specified method and params and checks the
+     * response.
+     *
+     * @param method The method to invoke
+     * @param params The parameters of the method
+     * @return The result of the operation
+     * @throws ConnectionException    If sending fails
+     * @throws ErrorResponseException If a {@link Response} with an {@link Error} is
+     *                                received
+     * @throws IdMismatchException    If the {@link Response} does not have the same
+     *                                id as the {@link Request}.
+     */
     public JsonElement callRemoteProcedure(String method, JsonObject params) throws ConnectionException, ErrorResponseException, IdMismatchException {
         var req = id.map(i -> new Request(i + "-" + requestId++, method, params)).orElse(new Request(requestId++, method, params));
         return checkResponse(req, sendRequest(req).get());
     }
 
     /**
-    * Sends a {@link Notification} with the specified method.
-    *
-    * @param method The method to invoke
-    * @throws ConnectionException If sending fails
-    */
+     * Sends a {@link Notification} with the specified method.
+     *
+     * @param method The method to invoke
+     * @throws ConnectionException If sending fails
+     */
     public void sendNotification(String method) throws ConnectionException {
         sendRequest(new Notification(method));
     }
 
     /**
-    * Sends a {@link Notification} with the specified method and parameters.
-    *
-    * @param method The method to invoke
-    * @param params The parameters of the method
-    * @throws ConnectionException If sending fails
-    */
+     * Sends a {@link Notification} with the specified method and parameters.
+     *
+     * @param method The method to invoke
+     * @param params The parameters of the method
+     * @throws ConnectionException If sending fails
+     */
     public void sendNotification(String method, JsonArray params) throws ConnectionException {
         sendRequest(new Notification(method, params));
     }
 
     /**
-    * Sends a {@link Notification} with the specified method and parameters.
-    *
-    * @param method The method to invoke
-    * @param params The parameters of the method
-    * @throws ConnectionException If sending fails
-    */
+     * Sends a {@link Notification} with the specified method and parameters.
+     *
+     * @param method The method to invoke
+     * @param params The parameters of the method
+     * @throws ConnectionException If sending fails
+     */
     public void sendNotification(String method, JsonObject params) throws ConnectionException {
         sendRequest(new Notification(method, params));
     }
@@ -171,10 +178,11 @@ public class Connection {
     /**
      * Sends an array of {@link Request} objects to the server.
      * <p>
-     * If all requests are {@link Notification Notifications}
-     * the returned {@link Optional} will be empty.
+     * If all requests are {@link Notification Notifications} the returned
+     * {@link Optional} will be empty.
      *
-     * @param requests The {@link Request Requests} or {@link Notification Notifications}
+     * @param requests The {@link Request Requests} or {@link Notification
+     *                 Notifications}
      * @return A optional {@link Response} array
      * @throws ConnectionException If sending fails
      */
@@ -219,7 +227,7 @@ public class Connection {
      * @param res The response to be checked
      * @return The result of the {@link Response}
      * @throws ErrorResponseException If instead of a result a error was received
-     * @throws IdMismatchException If the ids do not match
+     * @throws IdMismatchException    If the ids do not match
      */
     protected JsonElement checkResponse(Request req, Response res) throws ErrorResponseException, IdMismatchException {
         if (res.isUnsuccessful())

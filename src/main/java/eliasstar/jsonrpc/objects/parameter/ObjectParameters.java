@@ -11,9 +11,9 @@ import com.google.gson.stream.JsonWriter;
  * Represents the params in object format.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
- * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC Specification</a>
+ * @see <a href="https://www.jsonrpc.org/specification#request_object">JSON-RPC
+ *      Specification</a>
  */
 public final class ObjectParameters implements Parameters<JsonObject> {
 
@@ -50,11 +50,23 @@ public final class ObjectParameters implements Parameters<JsonObject> {
         Streams.write(params, out);
     }
 
+    /**
+     * Returns the hash code for this {@link ObjectParameters}.
+     *
+     * @return The hash code of the {@link JsonObject}
+     */
     @Override
     public int hashCode() {
         return params.hashCode();
     }
 
+    /**
+     * Two {@link ObjectParameters} objects are equal if their underlying
+     * {@link JsonObject} is equal.
+     *
+     * @param obj The object to be checked
+     * @return {@code true} if the object is equal as described above
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof ObjectParameters) {
@@ -66,6 +78,11 @@ public final class ObjectParameters implements Parameters<JsonObject> {
         return false;
     }
 
+    /**
+     * Returns the string representation for this {@link ObjectParameters}.
+     *
+     * @return The value of the {@link JsonObject} as string
+     */
     @Override
     public String toString() {
         return params.toString();

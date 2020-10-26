@@ -10,9 +10,9 @@ import com.google.gson.stream.JsonWriter;
  * Represents an id with a type of {@link Number} concrete {@link BigDecimal}.
  *
  * @author Elias*
- * @version 1.2.0
  * @since 0.1.0
- * @see <a href="https://www.jsonrpc.org/specification">JSON-RPC Specification</a>
+ * @see <a href="https://www.jsonrpc.org/specification">JSON-RPC
+ *      Specification</a>
  */
 public final class NumberId implements Id<BigDecimal> {
 
@@ -49,11 +49,22 @@ public final class NumberId implements Id<BigDecimal> {
         out.value(id);
     }
 
+    /**
+     * Returns the hash code for this {@link NumberId}.
+     *
+     * @return The hash code of the underlying id
+     */
     @Override
     public int hashCode() {
         return id.hashCode();
     }
 
+    /**
+     * Two {@link NumberId} objects are equal if their underlying id is equal.
+     *
+     * @param obj The object to be checked
+     * @return {@code true} if the object is equal as described above
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof NumberId) {
@@ -65,6 +76,11 @@ public final class NumberId implements Id<BigDecimal> {
         return false;
     }
 
+    /**
+     * Returns the string representation for this {@link NumberId}.
+     *
+     * @return The value of the underlying id as string
+     */
     @Override
     public String toString() {
         return id.toString();
