@@ -9,7 +9,7 @@ import java.time.Duration;
 import com.google.gson.Gson;
 
 /**
- * This facade can be used to get startes quickly and easily with sending RPC
+ * This facade can be used to get started quickly and easily with sending RPC
  * requests.
  *
  * @author Elias*
