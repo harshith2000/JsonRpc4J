@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2020-2021 Elias*
+ *
+ * This file is part of JsonRpc4J.
+ *
+ * JsonRpc4J is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or any later version.
+ *
+ * JsonRpc4J is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JsonRpc4J. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package eliasstar.jsonrpc.objects;
 
 import java.math.BigDecimal;
@@ -53,8 +70,8 @@ public class Request {
     /**
      * Creates a {@link Request}.
      *
-     * @param id     If null the {@link Request} is considered to be a
-     *               {@link Notification}
+     * @param id If null the {@link Request} is considered to be a
+     *        {@link Notification}
      * @param method Must not be null
      * @param params If null the {@link Request} has no params
      */
@@ -72,7 +89,7 @@ public class Request {
      * {@code null} value. If you want to omit the id, you should create a
      * {@link Notification}.
      *
-     * @param id     A id of type {@link String} or {@code null}
+     * @param id A id of type {@link String} or {@code null}
      * @param method The non-null method you want to invoke
      */
     public Request(String id, String method) {
@@ -90,7 +107,7 @@ public class Request {
      * create a request without parameters, you should use
      * {@link #Request(String, String)}
      *
-     * @param id     A id of type {@link String} or {@code null}
+     * @param id A id of type {@link String} or {@code null}
      * @param method The non-null method you want to invoke
      * @param params The parameters provided as {@link JsonArray}
      */
@@ -109,7 +126,7 @@ public class Request {
      * create a request without parameters, you should use
      * {@link #Request(String, String)}
      *
-     * @param id     A id of type {@link String} or {@code null}
+     * @param id A id of type {@link String} or {@code null}
      * @param method The non-null method you want to invoke
      * @param params The parameters provided as {@link JsonObject}
      */
@@ -124,7 +141,7 @@ public class Request {
      * {@code null} value. If you want to omit the id, you should create a
      * {@link Notification}.
      *
-     * @param id     A id of type {@link Number} or {@code null}
+     * @param id A id of type {@link Number} or {@code null}
      * @param method The non-null method you want to invoke
      */
     public Request(Number id, String method) {
@@ -142,7 +159,7 @@ public class Request {
      * create a request without parameters, you should use
      * {@link #Request(Number, String)}
      *
-     * @param id     A id of type {@link Number} or {@code null}
+     * @param id A id of type {@link Number} or {@code null}
      * @param method The non-null method you want to invoke
      * @param params The parameters provided as {@link JsonArray}
      */
@@ -161,7 +178,7 @@ public class Request {
      * create a request without parameters, you should use
      * {@link #Request(Number, String)}
      *
-     * @param id     A id of type {@link Number} or {@code null}
+     * @param id A id of type {@link Number} or {@code null}
      * @param method The non-null method you want to invoke
      * @param params The parameters provided as {@link JsonObject}
      */

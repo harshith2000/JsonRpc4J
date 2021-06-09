@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2020-2021 Elias*
+ *
+ * This file is part of JsonRpc4J.
+ *
+ * JsonRpc4J is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or any later version.
+ *
+ * JsonRpc4J is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JsonRpc4J. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package eliasstar.jsonrpc;
 
 import java.io.IOException;
@@ -51,11 +68,10 @@ public class Connection {
     /**
      * Used by {@link ConnectionBuilder}.
      *
-     * @param id         The id prefix used for requests
-     * @param client     The client used for requests
+     * @param id The id prefix used for requests
+     * @param client The client used for requests
      * @param reqBuilder The request builder used for new requests
-     * @param gson       The gson instance used for serialization and
-     *                   deserialization.
+     * @param gson The gson instance used for serialization and deserialization.
      */
     protected Connection(String id, HttpClient client, HttpRequest.Builder reqBuilder, Gson gson) {
         this.id = Optional.ofNullable(id);
@@ -92,11 +108,11 @@ public class Connection {
      *
      * @param method The method to invoke
      * @return The result of the operation
-     * @throws ConnectionException    If sending fails
+     * @throws ConnectionException If sending fails
      * @throws ErrorResponseException If a {@link Response} with an {@link Error} is
-     *                                received
-     * @throws IdMismatchException    If the {@link Response} does not have the same
-     *                                id as the {@link Request}.
+     *         received
+     * @throws IdMismatchException If the {@link Response} does not have the same id
+     *         as the {@link Request}.
      */
     public JsonElement callRemoteProcedure(String method) throws ConnectionException, ErrorResponseException, IdMismatchException {
         var req = id.map(i -> new Request(i + "-" + requestId++, method)).orElse(new Request(requestId++, method));
@@ -112,11 +128,11 @@ public class Connection {
      * @param method The method to invoke
      * @param params The parameters of the method
      * @return The result of the operation
-     * @throws ConnectionException    If sending fails
+     * @throws ConnectionException If sending fails
      * @throws ErrorResponseException If a {@link Response} with an {@link Error} is
-     *                                received
-     * @throws IdMismatchException    If the {@link Response} does not have the same
-     *                                id as the {@link Request}.
+     *         received
+     * @throws IdMismatchException If the {@link Response} does not have the same id
+     *         as the {@link Request}.
      */
     public JsonElement callRemoteProcedure(String method, JsonArray params) throws ConnectionException, ErrorResponseException, IdMismatchException {
         var req = id.map(i -> new Request(i + "-" + requestId++, method, params)).orElse(new Request(requestId++, method, params));
@@ -132,11 +148,11 @@ public class Connection {
      * @param method The method to invoke
      * @param params The parameters of the method
      * @return The result of the operation
-     * @throws ConnectionException    If sending fails
+     * @throws ConnectionException If sending fails
      * @throws ErrorResponseException If a {@link Response} with an {@link Error} is
-     *                                received
-     * @throws IdMismatchException    If the {@link Response} does not have the same
-     *                                id as the {@link Request}.
+     *         received
+     * @throws IdMismatchException If the {@link Response} does not have the same id
+     *         as the {@link Request}.
      */
     public JsonElement callRemoteProcedure(String method, JsonObject params) throws ConnectionException, ErrorResponseException, IdMismatchException {
         var req = id.map(i -> new Request(i + "-" + requestId++, method, params)).orElse(new Request(requestId++, method, params));
@@ -182,7 +198,7 @@ public class Connection {
      * {@link Optional} will be empty.
      *
      * @param requests The {@link Request Requests} or {@link Notification
-     *                 Notifications}
+     *        Notifications}
      * @return A optional {@link Response} array
      * @throws ConnectionException If sending fails
      */
@@ -227,7 +243,7 @@ public class Connection {
      * @param res The response to be checked
      * @return The result of the {@link Response}
      * @throws ErrorResponseException If instead of a result a error was received
-     * @throws IdMismatchException    If the ids do not match
+     * @throws IdMismatchException If the ids do not match
      */
     protected JsonElement checkResponse(Request req, Response res) throws ErrorResponseException, IdMismatchException {
         if (res.isUnsuccessful())

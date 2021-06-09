@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2020-2021 Elias*
+ *
+ * This file is part of JsonRpc4J.
+ *
+ * JsonRpc4J is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or any later version.
+ *
+ * JsonRpc4J is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JsonRpc4J. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package eliasstar.jsonrpc.exceptions;
 
 import java.util.Optional;
@@ -36,7 +53,7 @@ public final class ErrorResponseException extends RpcException {
     /**
      * Creates a {@link ErrorResponseException} without additional data.
      *
-     * @param code    The error type that occurred
+     * @param code The error type that occurred
      * @param message A short description of the error
      */
     public ErrorResponseException(long code, String message) {
@@ -46,9 +63,9 @@ public final class ErrorResponseException extends RpcException {
     /**
      * Creates a {@link ErrorResponseException} with additional data.
      *
-     * @param code    The error type that occurred
+     * @param code The error type that occurred
      * @param message A short description of the error
-     * @param data    Additional information about the error
+     * @param data Additional information about the error
      */
     public ErrorResponseException(long code, String message, JsonElement data) {
         super(message);

@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2020-2021 Elias*
+ *
+ * This file is part of JsonRpc4J.
+ *
+ * JsonRpc4J is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or any later version.
+ *
+ * JsonRpc4J is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JsonRpc4J. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package eliasstar.jsonrpc.exceptions;
 
 import eliasstar.jsonrpc.objects.id.Id;
@@ -25,9 +42,9 @@ public final class IdMismatchException extends RpcException {
      * Creates a {@link IdMismatchException}.
      *
      * @param reqId {@link Id} of the {@link eliasstar.jsonrpc.objects.Request
-     *              Request}
+     *        Request}
      * @param resId {@link Id} of the {@link eliasstar.jsonrpc.objects.Response
-     *              Response}
+     *        Response}
      */
     public IdMismatchException(Id<?> reqId, Id<?> resId) {
         super(String.format("Request id (%s) does not match response id (%s)", reqId, resId));

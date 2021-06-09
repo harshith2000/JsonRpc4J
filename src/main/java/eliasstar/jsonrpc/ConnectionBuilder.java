@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2020-2021 Elias*
+ *
+ * This file is part of JsonRpc4J.
+ *
+ * JsonRpc4J is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or any later version.
+ *
+ * JsonRpc4J is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JsonRpc4J. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package eliasstar.jsonrpc;
 
 import java.net.URI;
@@ -51,7 +68,7 @@ public final class ConnectionBuilder {
      * url.
      *
      * @param client The client used a new {@link Connection}
-     * @param url    The url used to create a {@link HttpRequest.Builder}
+     * @param url The url used to create a {@link HttpRequest.Builder}
      */
     public ConnectionBuilder(HttpClient client, String url) {
         this.client = Objects.requireNonNull(client);
@@ -148,7 +165,7 @@ public final class ConnectionBuilder {
      * {@link Connection}.
      *
      * @param gson The {@link GsonBuilder} to be used for a created
-     *             {@link Connection}
+     *        {@link Connection}
      * @return {@code this} to satisfy the builder pattern
      */
     public ConnectionBuilder setGson(GsonBuilder gson) {
@@ -171,7 +188,7 @@ public final class ConnectionBuilder {
      * @return A new {@link Connection} with the settings of this
      *         {@link ConnectionBuilder}
      * @throws IllegalStateException If neither a {@link HttpRequest.Builder} nor a
-     *                               {@link URI} was set
+     *         {@link URI} was set
      */
     public Connection build() {
         if (requestBuilder == null)

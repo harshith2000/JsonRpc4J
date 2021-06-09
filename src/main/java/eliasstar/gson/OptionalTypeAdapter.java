@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2020-2021 Elias*
+ *
+ * This file is part of JsonRpc4J.
+ *
+ * JsonRpc4J is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or any later version.
+ *
+ * JsonRpc4J is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JsonRpc4J. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package eliasstar.gson;
 
 import java.io.IOException;
@@ -29,7 +46,7 @@ final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
     /**
      * Used by {@link OptionalTypeAdapterFactory}.
      *
-     * @param gson           The current gson instance
+     * @param gson The current gson instance
      * @param typeOfOptional The type parameter of the {@link Optional}
      */
     OptionalTypeAdapter(Gson gson, Type typeOfOptional) {
@@ -41,7 +58,7 @@ final class OptionalTypeAdapter extends TypeAdapter<Optional<?>> {
      * Writes one JSON value (an array, object, string, number, boolean or null) for
      * the value of optional.
      *
-     * @param out      The {@link JsonWriter} used as output
+     * @param out The {@link JsonWriter} used as output
      * @param optional The {@link Optional} which is serialized
      * @throws IOException If serialization fails
      */
