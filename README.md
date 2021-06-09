@@ -4,9 +4,7 @@
 ## Downloads
 ### Jar
 Releases can be downloaded [here](https://github.com/EliasStar/JsonRpc4J/releases).
-If you need an "all in one" jar, grab the one with the jar-with-dependencies suffix. I includes the dependencies, therefore you don't need anything else.
-If you want to manage your dependencies yourself use the one without a suffix.
-"sources" suffix includes the raw, uncompiled sourcecode for reference and the javadoc can be found in the "javadoc" suffix jar.
+The javadoc can be found in the "javadoc" suffix jar and the "sources" suffix jar includes the raw, uncompiled source code for reference.
 
 ### Maven
 #### pom.xml
@@ -81,7 +79,6 @@ var results = con.sendBatchRequest(
     new Notification("exampleNotification")
 );
 ```
-
 
 ## License
 JsonRpc4J - A general JSON-RPC 2.0 Wrapper for Java <br>

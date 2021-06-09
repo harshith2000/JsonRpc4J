@@ -27,7 +27,6 @@ jobs:
           git config --global user.name "$(git log --format='%an' HEAD^!)"
           git config --global user.email "$(git log --format='%ae' HEAD^!)"
           mvn -B deploy -s ${{ github.workspace }}/settings.xml
-          mvn -B assembly:single
 
       - name: Deploy to release
         uses: shogo82148/actions-upload-release-asset@v1
