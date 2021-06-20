@@ -12,7 +12,7 @@ assignees: ''
 **Version:**
 > E.g. 1.0.0
 
-**To Reproduce**
+**How to reproduce**
 ```
 // The portion of your code which is demonstrating the bug
 ```
