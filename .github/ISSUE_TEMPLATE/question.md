@@ -1,10 +1,9 @@
 ---
 name: Question
 about: Ask a question about this library
-title: ''
-labels: new, question
+title: '[Question] <title>'
+labels: question, new
 assignees: ''
-
 ---
 
 **What do you want to know?**
