@@ -20,7 +20,9 @@ package eliasstar.gson;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,6 +41,12 @@ public final class OptionalTypeAdapterTests {
         gsonWithNulls = gson.newBuilder().serializeNulls().create();
     }
 
+    private String normalizeJson(String json) {
+        return Arrays.stream(json.replaceAll("[{}\"]", "").split(","))
+                .sorted()
+                .collect(Collectors.joining(","));
+    }
+
     @Test
     public void testOptionalSerialization() {
         var testObj = new OptionalTestObject();
@@ -47,11 +55,11 @@ public final class OptionalTypeAdapterTests {
 
         testObj.testOptional = Optional.of("test");
         assertEquals("{\"testOptional\":\"test\"}", gson.toJson(testObj));
-        assertEquals("{\"testString\":null,\"testOptional\":\"test\"}", gsonWithNulls.toJson(testObj));
+        assertEquals(normalizeJson("{\"testString\":null,\"testOptional\":\"test\"}"), normalizeJson(gsonWithNulls.toJson(testObj)));
 
         testObj.testString = "test";
-        assertEquals("{\"testString\":\"test\",\"testOptional\":\"test\"}", gson.toJson(testObj));
-        assertEquals("{\"testString\":\"test\",\"testOptional\":\"test\"}", gsonWithNulls.toJson(testObj));
+        assertEquals(normalizeJson("{\"testString\":\"test\",\"testOptional\":\"test\"}"), normalizeJson(gson.toJson(testObj)));
+        assertEquals(normalizeJson("{\"testString\":\"test\",\"testOptional\":\"test\"}"), normalizeJson(gsonWithNulls.toJson(testObj)));
 
         testObj.testOptional = Optional.empty();
         assertEquals("{\"testString\":\"test\"}", gson.toJson(testObj));

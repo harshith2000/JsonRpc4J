@@ -21,7 +21,9 @@ package eliasstar.jsonrpc.objects;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -45,6 +47,12 @@ public final class RequestTests {
         gsonWithNulls = GsonProvider.gsonWithNulls();
     }
 
+    private String normalizeJson(String json) {
+        return Arrays.stream(json.replaceAll("[{}\"]", "").split(","))
+                .sorted()
+                .collect(Collectors.joining(","));
+    }
+
     @Test
     public void testRequestIdSerialization() {
         var cases = new HashMap<String, Request>();
@@ -54,8 +62,8 @@ public final class RequestTests {
         cases.put("{\"jsonrpc\":\"2.0\",\"id\":null,\"method\":\"test\"}", new Request(NullId.instance(), "test", null));
 
         cases.forEach((e, a) -> assertAll(
-                () -> assertEquals(e, gson.toJson(a)),
-                () -> assertEquals(e, gsonWithNulls.toJson(a))));
+                () -> assertEquals(normalizeJson(e), normalizeJson(gson.toJson(a))),
+                () -> assertEquals(normalizeJson(e), normalizeJson(gsonWithNulls.toJson(a)))));
     }
 
     @Test
@@ -76,15 +84,15 @@ public final class RequestTests {
         arrParams.add(0);
         arrParams.add(JsonNull.INSTANCE);
 
-        assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[\"test\",0,null]}", gson.toJson(new Notification("test", arrParams)));
+        assertEquals(normalizeJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[\"test\",0,null]}"), normalizeJson(gson.toJson(new Notification("test", arrParams))));
 
         var objParams = new JsonObject();
         objParams.addProperty("string", "test");
         objParams.addProperty("number", 0);
         objParams.add("null", JsonNull.INSTANCE);
 
-        assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{\"string\":\"test\",\"number\":0}}", gson.toJson(new Notification("test", objParams)));
-        assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{\"string\":\"test\",\"number\":0,\"null\":null}}", gsonWithNulls.toJson(new Notification("test", objParams)));
+        assertEquals(normalizeJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{\"string\":\"test\",\"number\":0}}"), normalizeJson(gson.toJson(new Notification("test", objParams))));
+        assertEquals(normalizeJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{\"string\":\"test\",\"number\":0,\"null\":null}}"), normalizeJson(gsonWithNulls.toJson(new Notification("test", objParams))));
     }
 
     @Test

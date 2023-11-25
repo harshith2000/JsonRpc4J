@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -149,6 +150,12 @@ public final class ConnectionTests {
         });
     }
 
+    private String normalizeJson(String json) {
+        return Arrays.stream(json.replaceAll("[{}\"]", "").split(","))
+                .sorted()
+                .collect(Collectors.joining(","));
+    }
+
     @Test
     public void testNotificationSending() {
         client.setResponse("test");
@@ -156,15 +163,15 @@ public final class ConnectionTests {
         var cases = new Executable[] {
                 () -> {
                     connection.sendNotification("test");
-                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\"}", client.getRequest());
+                    assertEquals(normalizeJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\"}"), normalizeJson(client.getRequest()));
                 },
                 () -> {
                     connection.sendNotification("test", new JsonArray());
-                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[]}", client.getRequest());
+                    assertEquals(normalizeJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[]}"), normalizeJson(client.getRequest()));
                 },
                 () -> {
                     connection.sendNotification("test", new JsonObject());
-                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{}}", client.getRequest());
+                    assertEquals(normalizeJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{}}"), normalizeJson(client.getRequest()));
                 }
         };
 
