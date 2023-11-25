@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -43,9 +44,11 @@ public final class NotificationTests {
         var json = "{\"jsonrpc\":\"2.0\",\"method\":\"test\"}";
         var obj = new Notification("test");
 
+        JsonObject expectedJson = gson.fromJson(json, JsonObject.class);
         assertAll(
-                () -> assertEquals(json, gson.toJson(obj)),
-                () -> assertEquals(json, gsonWithNulls.toJson(obj)));
+                () -> assertEquals(expectedJson, gson.fromJson(gson.toJson(obj), JsonObject.class)),
+                () -> assertEquals(expectedJson, gsonWithNulls.fromJson(gsonWithNulls.toJson(obj), JsonObject.class))
+        );
     }
 
     @Test

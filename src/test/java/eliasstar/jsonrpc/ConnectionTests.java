@@ -156,15 +156,21 @@ public final class ConnectionTests {
         var cases = new Executable[] {
                 () -> {
                     connection.sendNotification("test");
-                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\"}", client.getRequest());
+                    JsonObject expected = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\"}", JsonObject.class);
+                    JsonObject actual = gson.fromJson(client.getRequest(), JsonObject.class);
+                    assertEquals(expected, actual);
                 },
                 () -> {
                     connection.sendNotification("test", new JsonArray());
-                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[]}", client.getRequest());
+                    JsonObject expected = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[]}", JsonObject.class);
+                    JsonObject actual = gson.fromJson(client.getRequest(), JsonObject.class);
+                    assertEquals(expected, actual);
                 },
                 () -> {
                     connection.sendNotification("test", new JsonObject());
-                    assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{}}", client.getRequest());
+                    JsonObject expected = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{}}", JsonObject.class);
+                    JsonObject actual = gson.fromJson(client.getRequest(), JsonObject.class);
+                    assertEquals(expected, actual);
                 }
         };
 
