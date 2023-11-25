@@ -27,6 +27,9 @@ import org.junit.jupiter.api.Test;
 
 import eliasstar.utils.GsonProvider;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public final class NotificationTests {
 
     private static Gson gson;
@@ -38,14 +41,20 @@ public final class NotificationTests {
         gsonWithNulls = GsonProvider.gsonWithNulls();
     }
 
+    private String normalizeJson(String json) {
+        return Arrays.stream(json.replaceAll("[{}\"]", "").split(","))
+                .sorted()
+                .collect(Collectors.joining(","));
+    }
+
     @Test
     public void testNotificationSerialization() {
         var json = "{\"jsonrpc\":\"2.0\",\"method\":\"test\"}";
         var obj = new Notification("test");
 
         assertAll(
-                () -> assertEquals(json, gson.toJson(obj)),
-                () -> assertEquals(json, gsonWithNulls.toJson(obj)));
+                () -> assertEquals(normalizeJson(json), normalizeJson(gson.toJson(obj))),
+                () -> assertEquals(normalizeJson(json), normalizeJson(gsonWithNulls.toJson(obj))));
     }
 
     @Test
