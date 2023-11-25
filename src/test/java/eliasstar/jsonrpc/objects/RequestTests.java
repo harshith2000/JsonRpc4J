@@ -72,7 +72,6 @@ public final class RequestTests {
 
     @Test
     public void testRequestParamsSerialization() {
-        // Test array parameters
         JsonArray arrParams = new JsonArray();
         arrParams.add("test");
         arrParams.add(0);
@@ -80,7 +79,6 @@ public final class RequestTests {
         assertEquals(gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[\"test\",0,null]}", JsonObject.class),
                 gson.fromJson(gson.toJson(new Notification("test", arrParams)), JsonObject.class));
 
-        // Test object parameters
         JsonObject objParams = new JsonObject();
         objParams.addProperty("string", "test");
         objParams.addProperty("number", 0);

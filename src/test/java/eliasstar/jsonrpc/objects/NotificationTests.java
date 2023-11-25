@@ -47,8 +47,7 @@ public final class NotificationTests {
         JsonObject expectedJson = gson.fromJson(json, JsonObject.class);
         assertAll(
                 () -> assertEquals(expectedJson, gson.fromJson(gson.toJson(obj), JsonObject.class)),
-                () -> assertEquals(expectedJson, gsonWithNulls.fromJson(gsonWithNulls.toJson(obj), JsonObject.class))
-        );
+                () -> assertEquals(expectedJson, gsonWithNulls.fromJson(gsonWithNulls.toJson(obj), JsonObject.class)));
     }
 
     @Test
