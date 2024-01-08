@@ -156,21 +156,18 @@ public final class ConnectionTests {
         var cases = new Executable[] {
                 () -> {
                     connection.sendNotification("test");
-                    JsonObject expected = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\"}", JsonObject.class);
-                    JsonObject actual = gson.fromJson(client.getRequest(), JsonObject.class);
-                    assertEquals(expected, actual);
+                    var json = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\"}", JsonObject.class);
+                    assertEquals(json, gson.fromJson(client.getRequest(), JsonObject.class));
                 },
                 () -> {
                     connection.sendNotification("test", new JsonArray());
-                    JsonObject expected = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[]}", JsonObject.class);
-                    JsonObject actual = gson.fromJson(client.getRequest(), JsonObject.class);
-                    assertEquals(expected, actual);
+                    var json = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":[]}", JsonObject.class);
+                    assertEquals(json, gson.fromJson(client.getRequest(), JsonObject.class));
                 },
                 () -> {
                     connection.sendNotification("test", new JsonObject());
-                    JsonObject expected = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{}}", JsonObject.class);
-                    JsonObject actual = gson.fromJson(client.getRequest(), JsonObject.class);
-                    assertEquals(expected, actual);
+                    var json = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\",\"params\":{}}", JsonObject.class);
+                    assertEquals(json, gson.fromJson(client.getRequest(), JsonObject.class));
                 }
         };
 

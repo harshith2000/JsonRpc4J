@@ -41,13 +41,12 @@ public final class NotificationTests {
 
     @Test
     public void testNotificationSerialization() {
-        var json = "{\"jsonrpc\":\"2.0\",\"method\":\"test\"}";
+        var json = gson.fromJson("{\"jsonrpc\":\"2.0\",\"method\":\"test\"}", JsonObject.class);
         var obj = new Notification("test");
 
-        JsonObject expectedJson = gson.fromJson(json, JsonObject.class);
         assertAll(
-                () -> assertEquals(expectedJson, gson.fromJson(gson.toJson(obj), JsonObject.class)),
-                () -> assertEquals(expectedJson, gsonWithNulls.fromJson(gsonWithNulls.toJson(obj), JsonObject.class)));
+                () -> assertEquals(json, gson.fromJson(gson.toJson(obj), JsonObject.class)),
+                () -> assertEquals(json, gsonWithNulls.fromJson(gsonWithNulls.toJson(obj), JsonObject.class)));
     }
 
     @Test
